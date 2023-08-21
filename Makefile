@@ -14,11 +14,11 @@ run_reader_microservice:
 
 docker_dev:
 	@echo Starting local docker dev compose
-	sudo docker compose -f docker-compose.yaml up --build
+	docker compose -f docker-compose.yaml up --build
 
 local:
 	@echo Starting local docker compose
-	docker-compose -f docker-compose.local.yaml up -d --build
+	docker compose -f docker-compose.local.yaml up -d --build
 
 
 # ==============================================================================
@@ -101,7 +101,7 @@ migrate_down:
 # MongoDB
 
 mongo:
-	cd ./scripts && mongo admin -u admin -p admin < init.js
+	cd ./scripts && mongosh admin -u admin -p admin < init.js
 
 
 # ==============================================================================
