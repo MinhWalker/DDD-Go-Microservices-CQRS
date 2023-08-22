@@ -59,7 +59,7 @@ p/s: please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install
 
 ### Overview
 
-![system_diagram.svg](diagram%2Fsystem_diagram.svg)
+![CQRS_diagram.svg](diagram%2FCQRS_diagram.svg)
 
 ### Project structure
 ```
@@ -295,6 +295,7 @@ p/s: please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install
 Flow handle message 
 
 ```mermaid
+
 sequenceDiagram
   box client
     participant kafka message broker
