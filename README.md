@@ -301,11 +301,11 @@ sequenceDiagram
     participant consumer group
   end
   kafka message broker->>consumer group: consume message
-  consumer group->>commands/queries service: call
+  consumer group->>+commands/queries service: call
   loop retry consume message
-  commands/queries service->>commands/queries service: retry
+  commands/queries service->>+commands/queries service: retry
   end
-  commands/queries service-->>kafka message broker: publish error message
+  commands/queries service-->>-kafka message broker: publish error message
   par commands service to Data Access
     commands/queries service->>+Repository: call repository
     Repository ->>+ Data Access: Interacts with data access
@@ -315,7 +315,7 @@ sequenceDiagram
     Repository ->>- commands/queries service: return result or data
     Note over commands/queries service,Database: Model entities
     end
-  commands/queries service->>kafka message broker: publish message
+  commands/queries service->>-kafka message broker: publish message
 
 ```
 
