@@ -18,9 +18,10 @@ func NewProductService(
 	cfg *config.Config,
 	mongoRepo repository.Repository,
 	redisRepo repository.CacheRepository,
+	pgRepo repository.Repository,
 ) *ProductService {
 
-	createProductHandler := commands.NewCreateProductHandler(log, cfg, mongoRepo, redisRepo)
+	createProductHandler := commands.NewCreateProductHandler(log, cfg, mongoRepo, redisRepo, pgRepo)
 	deleteProductCmdHandler := commands.NewDeleteProductCmdHandler(log, cfg, mongoRepo, redisRepo)
 	updateProductCmdHandler := commands.NewUpdateProductCmdHandler(log, cfg, mongoRepo, redisRepo)
 

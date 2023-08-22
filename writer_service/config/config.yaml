@@ -19,7 +19,7 @@ postgres:
   port: 5432
   user: postgres
   password: postgres
-  dbName: products
+  dbName: master_db
   sslMode: false
 kafka:
   brokers: [ "localhost:9092" ]

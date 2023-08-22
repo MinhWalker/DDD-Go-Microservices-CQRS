@@ -18,10 +18,11 @@ type createProductHandler struct {
 	cfg       *config.Config
 	mongoRepo repository.Repository
 	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewCreateProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository) *createProductHandler {
-	return &createProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo}
+func NewCreateProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) CreateProductCmdHandler {
+	return &createProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
 func (c *createProductHandler) Handle(ctx context.Context, command *CreateProductCommand) error {
@@ -37,7 +38,7 @@ func (c *createProductHandler) Handle(ctx context.Context, command *CreateProduc
 		UpdatedAt:   command.UpdatedAt,
 	}
 
-	created, err := c.mongoRepo.CreateProduct(ctx, product)
+	created, err := c.pgRepo.CreateProduct(ctx, product)
 	if err != nil {
 		return err
 	}

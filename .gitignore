@@ -1,4 +1,6 @@
 .idea
 zk-single-kafka-single
 microservices_pgdata
+slave_pgdata
+master_pgdata
 main

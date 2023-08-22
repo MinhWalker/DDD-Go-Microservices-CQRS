@@ -79,9 +79,9 @@ pprof_allocs:
 # ==============================================================================
 # Go migrate postgresql https://github.com/golang-migrate/migrate
 
-DB_NAME = products
+DB_NAME = slave_db
 DB_HOST = localhost
-DB_PORT = 5432
+DB_PORT = 5434
 SSL_MODE = disable
 
 force_db:
