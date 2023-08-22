@@ -57,11 +57,11 @@ p/s: please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install
 
 ## Project struct:
 
-#### Overview
+### Overview
 
 ![system_diagram.svg](diagram%2Fsystem_diagram.svg)
 
-Project structure
+### Project structure
 ```
 .
 ├── Makefile
@@ -289,3 +289,33 @@ Project structure
 - ./reader_services: reader services consumer read data from cache db or slave db
 - ./writers_services: writer services consumer write data to master db
 - makefile: define all command for quick run
+
+### struct of consumer (reader and writer services)
+
+Flow handle message 
+
+```mermaid
+sequenceDiagram
+  box client
+    participant kafka message broker
+    participant consumer group
+  end
+  kafka message broker->>consumer group: consume message
+  consumer group->>commands/queries service: call
+  loop retry consume message
+  commands/queries service->>commands/queries service: retry
+  end
+  commands/queries service-->>kafka message broker: publish error message
+  par commands service to Data Access
+    commands/queries service->>+Repository: call repository
+    Repository ->>+ Data Access: Interacts with data access
+    Data Access ->>+ Database: Query models
+    Database ->>- Data Access: return models
+    Data Access ->>- Repository: return models data
+    Repository ->>- commands/queries service: return result or data
+    Note over commands/queries service,Database: Model entities
+    end
+  commands/queries service->>kafka message broker: publish message
+
+```
+
