@@ -91,8 +91,8 @@ func (p *mongoRepository) Search(ctx context.Context, search string, pagination 
 
 	filter := bson.D{
 		{Key: "$or", Value: bson.A{
-			bson.D{{Key: "name", Value: primitive.Regex{Pattern: search, Options: "gi"}}},
-			bson.D{{Key: "description", Value: primitive.Regex{Pattern: search, Options: "gi"}}},
+			bson.D{{Key: "name", Value: primitive.Regex{Pattern: search, Options: "i"}}},
+			bson.D{{Key: "description", Value: primitive.Regex{Pattern: search, Options: "i"}}},
 		}},
 	}
 

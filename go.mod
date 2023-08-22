@@ -34,7 +34,7 @@ require (
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/viper v1.8.1
 	github.com/swaggo/echo-swagger v1.1.2
-	github.com/swaggo/swag v1.7.1
+	github.com/swaggo/swag v1.7.9
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect

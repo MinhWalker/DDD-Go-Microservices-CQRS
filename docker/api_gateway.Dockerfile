@@ -1,4 +1,4 @@
-FROM golang:1.17-alpine
+FROM golang:1.19-alpine
 
 WORKDIR /app
 
@@ -6,7 +6,9 @@ ENV CONFIG=docker
 
 COPY .. /app
 
-RUN go get github.com/githubnemo/CompileDaemon
+RUN go get -u github.com/githubnemo/CompileDaemon
+RUN go install github.com/githubnemo/CompileDaemon
+RUN go mod tidy
 RUN go mod download
 
 
