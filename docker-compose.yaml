@@ -46,7 +46,7 @@ services:
     restart: always
     environment:
       - POSTGRES_HOST=host.docker.internal
-      - POSTGRES_PORT=5432
+      - POSTGRES_PORT=5434
       - REDIS_ADDR=host.docker.internal:6379
       - MONGO_URI=mongodb://host.docker.internal:27017
       - JAEGER_HOST=host.docker.internal:6831
@@ -57,7 +57,9 @@ services:
       - grafana
       - jaeger
       - mongodb
-      - microservices_postgesql
+#      - microservices_postgesql
+      - master_db
+      - slave_db
       - zoo1
       - kafka1
     networks: [ "microservices" ]
@@ -86,7 +88,9 @@ services:
       - prometheus
       - grafana
       - jaeger
-      - microservices_postgesql
+#      - microservices_postgesql
+      - master_db
+      - slave_db
       - mongodb
       - zoo1
       - kafka1
@@ -119,9 +123,27 @@ services:
       - '3005:3000'
     networks: [ "microservices" ]
 
-  microservices_postgesql:
+#  microservices_postgesql:
+#    image: postgres:13-alpine
+#    container_name: microservices_postgesql
+#    expose:
+#      - "5432"
+#    ports:
+#      - "5432:5432"
+#    restart: always
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_DB=products
+#      - POSTGRES_HOST=5432
+#    command: -p 5432
+#    volumes:
+#      - ./microservices_pgdata:/var/lib/postgresql/data
+#    networks: [ "microservices" ]
+
+  master_db:
     image: postgres:13-alpine
-    container_name: microservices_postgesql
+    container_name: master_db
     expose:
       - "5432"
     ports:
@@ -130,12 +152,34 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=products
+      - POSTGRES_DB=master_db
       - POSTGRES_HOST=5432
     command: -p 5432
     volumes:
-      - ./microservices_pgdata:/var/lib/postgresql/data
+      - ./master_pgdata:/var/lib/postgresql/data
     networks: [ "microservices" ]
+
+  slave_db:
+    image: postgres:13-alpine
+#    deploy:
+#      replicas: 2
+    expose:
+      - "5432"
+    ports:
+      - "5434:5432"  # Different port to avoid conflict with master
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=slave_db
+      - POSTGRES_HOST=5432
+    volumes:
+      - ./slave_pgdata:/var/lib/postgresql/data
+    networks:
+      - microservices
+    depends_on:
+      - master_db
+    command: [ "postgres", "-c", "primary_conninfo=host=master_db user=postgres password=postgres" ]
 
   redis:
     image: redis:6-alpine
@@ -217,6 +261,8 @@ services:
 
 volumes:
   mongodb_data_container:
+  master_pgdata:
+  slave_pgdata:
 
 networks:
   microservices:

@@ -17,12 +17,13 @@ type searchProductHandler struct {
 	cfg       *config.Config
 	mongoRepo repository.Repository
 	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewSearchProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository) *searchProductHandler {
-	return &searchProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo}
+func NewSearchProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *searchProductHandler {
+	return &searchProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
 func (s *searchProductHandler) Handle(ctx context.Context, query *SearchProductQuery) (*models.ProductsList, error) {
-	return s.mongoRepo.Search(ctx, query.Text, query.Pagination)
+	return s.pgRepo.Search(ctx, query.Text, query.Pagination)
 }

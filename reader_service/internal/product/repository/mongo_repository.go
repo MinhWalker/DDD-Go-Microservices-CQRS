@@ -21,7 +21,7 @@ type mongoRepository struct {
 	db  *mongo.Client
 }
 
-func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) *mongoRepository {
+func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) Repository {
 	return &mongoRepository{log: log, cfg: cfg, db: db}
 }
 
