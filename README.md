@@ -300,6 +300,12 @@ sequenceDiagram
     participant kafka message broker
     participant consumer group
   end
+  box server
+    participant commands/queries service
+    participant Repository
+    participant Data Access
+    participant Database
+  end
   kafka message broker->>consumer group: consume message
   consumer group->>+commands/queries service: call
   loop retry consume message
