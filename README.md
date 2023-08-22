@@ -53,7 +53,18 @@ Add new cluster host by value of KAFKA_ADVERTISED_LISTENERS on docker-compose fi
 3: make mongo                               // run mongo init scripts
 4: make swagger                             // generate swagger documentation
 ```
-p/s: please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install/), [migrate](https://github.com/golang-migrate/migrate) and [swagger](https://github.com/swaggo/swag) first
+p/s: 
+- please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install/), [migrate](https://github.com/golang-migrate/migrate) and [swagger](https://github.com/swaggo/swag) first
+- When run on ubuntu maybe meet error relative with permission to access slave_pgdata and master_pgdata, we can use that cmd to by pass :
+
+```
+stay in ./Go-CQRS-Kafka-gRPC-Microservices
+
+$ sudo chown -R $(whoami) $(pwd)/slave_data
+$ sudo chown -R $(whoami) $(pwd)/master_data
+
+```
+
 
 ## Project struct:
 

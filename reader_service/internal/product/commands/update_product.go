@@ -18,10 +18,11 @@ type updateProductCmdHandler struct {
 	cfg       *config.Config
 	mongoRepo repository.Repository
 	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewUpdateProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository) *updateProductCmdHandler {
-	return &updateProductCmdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo}
+func NewUpdateProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *updateProductCmdHandler {
+	return &updateProductCmdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
 func (c *updateProductCmdHandler) Handle(ctx context.Context, command *UpdateProductCommand) error {
@@ -36,7 +37,7 @@ func (c *updateProductCmdHandler) Handle(ctx context.Context, command *UpdatePro
 		UpdatedAt:   command.UpdatedAt,
 	}
 
-	updated, err := c.mongoRepo.UpdateProduct(ctx, product)
+	updated, err := c.pgRepo.UpdateProduct(ctx, product)
 	if err != nil {
 		return err
 	}

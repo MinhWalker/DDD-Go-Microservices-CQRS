@@ -18,10 +18,11 @@ type getProductByIdHandler struct {
 	cfg       *config.Config
 	mongoRepo repository.Repository
 	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository) *getProductByIdHandler {
-	return &getProductByIdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo}
+func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *getProductByIdHandler {
+	return &getProductByIdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
 func (q *getProductByIdHandler) Handle(ctx context.Context, query *GetProductByIdQuery) (*models.Product, error) {
@@ -32,7 +33,7 @@ func (q *getProductByIdHandler) Handle(ctx context.Context, query *GetProductByI
 		return product, nil
 	}
 
-	product, err := q.mongoRepo.GetProductById(ctx, query.ProductID)
+	product, err := q.pgRepo.GetProductById(ctx, query.ProductID)
 	if err != nil {
 		return nil, err
 	}

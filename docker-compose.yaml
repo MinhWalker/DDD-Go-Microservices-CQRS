@@ -46,7 +46,7 @@ services:
     restart: always
     environment:
       - POSTGRES_HOST=host.docker.internal
-      - POSTGRES_PORT=5432
+      - POSTGRES_PORT=5434
       - REDIS_ADDR=host.docker.internal:6379
       - MONGO_URI=mongodb://host.docker.internal:27017
       - JAEGER_HOST=host.docker.internal:6831

@@ -98,7 +98,7 @@ func (p *productRepository) Search(ctx context.Context, search string, paginatio
 	defer span.Finish()
 
 	query := `
-		SELECT id, name, description, price 
+		SELECT product_id, name, description, price 
 		FROM products
 		WHERE name ILIKE $1 OR description ILIKE $1
 		LIMIT $2 OFFSET $3
