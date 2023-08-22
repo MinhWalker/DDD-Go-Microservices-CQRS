@@ -30,7 +30,22 @@ http://localhost:3000
 
 http://localhost:5001/swagger/index.html
 
+### Kafka console UI
 
+Can use [conduktor](https://www.conduktor.io/) 
+
+```
+curl -L https://releases.conduktor.io/quick-start -o docker-compose.yml 
+&& docker compose up -d --wait 
+&& echo "Conduktor started on http://localhost:8080"
+```
+
+Add new cluster host by value of KAFKA_ADVERTISED_LISTENERS on docker-compose file to connect
+
+
+
+
+#### Follow step to serve on local
 
 ```
 1: make local or docker_dev                 // for run docker compose files
