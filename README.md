@@ -32,12 +32,11 @@ http://localhost:5001/swagger/index.html
 
 
 
-
 ```
-1: make local or docker_dev // for run docker compose files
-2: make migrate_up // run sql migrations
-3: make mongo // run mongo init scripts
-4: make swagger // generate swagger documentation
+1: make local or docker_dev                 // for run docker compose files
+2: make migrate_up                          // run sql migrations
+3: make mongo                               // run mongo init scripts
+4: make swagger                             // generate swagger documentation
 ```
 p/s: please install [mongosh](https://www.mongodb.com/docs/mongodb-shell/install/), [migrate](https://github.com/golang-migrate/migrate) and [swagger](https://github.com/swaggo/swag) first
 
@@ -275,4 +274,3 @@ Project structure
 - ./reader_services: reader services consumer read data from cache db or slave db
 - ./writers_services: writer services consumer write data to master db
 - makefile: define all command for quick run
-- 
