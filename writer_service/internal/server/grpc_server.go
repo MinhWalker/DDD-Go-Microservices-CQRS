@@ -1,8 +1,8 @@
 package server
 
 import (
-	grpc2 "github.com/AleksK1NG/cqrs-microservices/writer_service/internal/product/delivery/grpc"
-	writerService "github.com/AleksK1NG/cqrs-microservices/writer_service/proto/product_writer"
+	grpc2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/grpc"
+	writerService "github.com/minhwalker/cqrs-microservices/writer_service/proto/product_writer"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

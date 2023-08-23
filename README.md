@@ -42,9 +42,6 @@ curl -L https://releases.conduktor.io/quick-start -o docker-compose.yml
 
 Add new cluster host by value of KAFKA_ADVERTISED_LISTENERS on docker-compose file to connect
 
-
-
-
 #### Follow step to serve on local
 
 ```
@@ -70,7 +67,7 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 
 ### Overview
 
-![CQRS_diagram.svg](resource%2FCQRS_diagram.svg)
+![CQRS_diagram.svg](docs%2Fresource%2FCQRS_diagram.svg)
 
 ### Project structure
 ```

@@ -1,7 +1,7 @@
 package queries
 
 import (
-	"github.com/AleksK1NG/cqrs-microservices/pkg/utils"
+	"github.com/minhwalker/cqrs-microservices/pkg/utils"
 	uuid "github.com/satori/go.uuid"
 )
 

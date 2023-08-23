@@ -1,13 +1,13 @@
 package server
 
 import (
-	readerGrpc "github.com/AleksK1NG/cqrs-microservices/reader_service/internal/product/delivery/grpc"
-	readerService "github.com/AleksK1NG/cqrs-microservices/reader_service/proto/product_reader"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	readerGrpc "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/grpc"
+	readerService "github.com/minhwalker/cqrs-microservices/reader_service/proto/product_reader"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

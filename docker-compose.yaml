@@ -156,7 +156,7 @@ services:
       - POSTGRES_HOST=5432
     command: -p 5432
     volumes:
-      - ./master_pgdata:/var/lib/postgresql/data
+      - ./docker_data/master_pgdata:/var/lib/postgresql/data
     networks: [ "microservices" ]
 
   slave_db:
@@ -174,7 +174,7 @@ services:
       - POSTGRES_DB=slave_db
       - POSTGRES_HOST=5432
     volumes:
-      - ./slave_pgdata:/var/lib/postgresql/data
+      - ./docker_data/slave_pgdata:/var/lib/postgresql/data
     networks:
       - microservices
     depends_on:
@@ -200,8 +200,8 @@ services:
       ZOO_PORT: 2181
       ZOO_SERVERS: server.1=zoo1:2888:3888
     volumes:
-      - ./zk-single-kafka-single/zoo1/data:/data
-      - ./zk-single-kafka-single/zoo1/datalog:/datalog
+      - ./docker_data/zk-single-kafka-single/zoo1/data:/data
+      - ./docker_data/zk-single-kafka-single/zoo1/datalog:/datalog
     networks: [ "microservices" ]
 
   kafka1:
@@ -224,7 +224,7 @@ services:
       KAFKA_JMX_PORT: 9999
       KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-host.docker.internal}
     volumes:
-      - ./zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
+      - ./docker_data/zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
     depends_on:
       - zoo1
     networks: [ "microservices" ]

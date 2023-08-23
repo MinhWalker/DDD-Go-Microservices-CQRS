@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"github.com/AleksK1NG/cqrs-microservices/pkg/constants"
+	"github.com/minhwalker/cqrs-microservices/pkg/constants"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"

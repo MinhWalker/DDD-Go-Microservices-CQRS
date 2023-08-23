@@ -2,11 +2,11 @@ package commands
 
 import (
 	"context"
-	"github.com/AleksK1NG/cqrs-microservices/api_gateway_service/config"
-	kafkaClient "github.com/AleksK1NG/cqrs-microservices/pkg/kafka"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/tracing"
-	kafkaMessages "github.com/AleksK1NG/cqrs-microservices/proto/kafka"
+	"github.com/minhwalker/cqrs-microservices/api_gateway_service/config"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
+	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
+	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
 	"github.com/opentracing/opentracing-go"
 	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"

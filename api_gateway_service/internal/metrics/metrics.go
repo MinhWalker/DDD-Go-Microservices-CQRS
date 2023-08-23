@@ -2,7 +2,7 @@ package metrics
 
 import (
 	"fmt"
-	"github.com/AleksK1NG/cqrs-microservices/api_gateway_service/config"
+	"github.com/minhwalker/cqrs-microservices/api_gateway_service/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )

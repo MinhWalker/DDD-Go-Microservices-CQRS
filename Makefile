@@ -79,9 +79,10 @@ pprof_allocs:
 # ==============================================================================
 # Go migrate postgresql https://github.com/golang-migrate/migrate
 
-DB_NAME = slave_db
+#DB_NAME = slave_db
+DB_NAME = master_db
 DB_HOST = localhost
-DB_PORT = 5434
+DB_PORT = 5432
 SSL_MODE = disable
 
 force_db:
@@ -101,7 +102,7 @@ migrate_down:
 # MongoDB
 
 mongo:
-	cd ./scripts && mongosh admin -u admin -p admin < init.js
+	cd ./migrations/mongo && mongosh admin -u admin -p admin < init.js
 
 
 # ==============================================================================

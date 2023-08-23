@@ -4,3 +4,4 @@ microservices_pgdata
 slave_pgdata
 master_pgdata
 main
+docker_data

@@ -2,21 +2,21 @@ package server
 
 import (
 	"context"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/interceptors"
-	kafkaClient "github.com/AleksK1NG/cqrs-microservices/pkg/kafka"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/mongodb"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/postgres"
-	redisClient "github.com/AleksK1NG/cqrs-microservices/pkg/redis"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/tracing"
-	"github.com/AleksK1NG/cqrs-microservices/reader_service/config"
-	"github.com/AleksK1NG/cqrs-microservices/reader_service/internal/metrics"
-	readerKafka "github.com/AleksK1NG/cqrs-microservices/reader_service/internal/product/delivery/kafka"
-	"github.com/AleksK1NG/cqrs-microservices/reader_service/internal/product/repository"
-	"github.com/AleksK1NG/cqrs-microservices/reader_service/internal/product/service"
 	"github.com/go-playground/validator"
 	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/minhwalker/cqrs-microservices/pkg/interceptors"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
+	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/pkg/mongodb"
+	"github.com/minhwalker/cqrs-microservices/pkg/postgres"
+	redisClient "github.com/minhwalker/cqrs-microservices/pkg/redis"
+	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	readerKafka "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/kafka"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
+	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
@@ -35,7 +35,7 @@ type server struct {
 	mongoClient *mongo.Client
 	redisClient redis.UniversalClient
 	pgConn      *pgxpool.Pool
-	ps          *service.ProductService
+	ps          *services.ProductService
 	metrics     *metrics.ReaderServiceMetrics
 }
 
@@ -71,11 +71,11 @@ func (s *server) Run() error {
 	defer s.redisClient.Close() // nolint: errcheck
 	s.log.Infof("Redis connected: %+v", s.redisClient.PoolStats())
 
-	productRepo := repository.NewProductRepository(s.log, s.cfg, pgxConn)
-	mongoRepo := repository.NewMongoRepository(s.log, s.cfg, s.mongoClient)
-	redisRepo := repository.NewRedisRepository(s.log, s.cfg, s.redisClient)
+	productRepo := product2.NewProductRepository(s.log, s.cfg, pgxConn)
+	mongoRepo := product2.NewMongoRepository(s.log, s.cfg, s.mongoClient)
+	redisRepo := product2.NewRedisRepository(s.log, s.cfg, s.redisClient)
 
-	s.ps = service.NewProductService(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
+	s.ps = services.NewProductService(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
 
 	readerMessageProcessor := readerKafka.NewReaderMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 

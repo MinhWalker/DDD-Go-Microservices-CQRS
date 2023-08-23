@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/AleksK1NG/cqrs-microservices/docs"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/minhwalker/cqrs-microservices/docs"
 	"strings"
 	"time"
 

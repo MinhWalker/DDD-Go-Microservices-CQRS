@@ -3,11 +3,11 @@ package config
 import (
 	"flag"
 	"fmt"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/constants"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/kafka"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/probes"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/pkg/constants"
+	"github.com/minhwalker/cqrs-microservices/pkg/kafka"
+	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/pkg/probes"
+	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	"github.com/pkg/errors"
 	"os"
 

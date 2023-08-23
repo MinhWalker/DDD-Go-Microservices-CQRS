@@ -2,11 +2,11 @@ package server
 
 import (
 	"context"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/constants"
-	kafkaClient "github.com/AleksK1NG/cqrs-microservices/pkg/kafka"
 	"github.com/heptiolabs/healthcheck"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/minhwalker/cqrs-microservices/pkg/constants"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"

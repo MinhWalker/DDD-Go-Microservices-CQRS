@@ -65,7 +65,7 @@ info:
   contact:
     email: alexander.bryksin@yandex.ru
     name: Alexander Bryksin
-    url: https://github.com/AleksK1NG
+    url: https://github.com/minhwalker
 paths:
   /products:
     post:

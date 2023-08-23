@@ -2,7 +2,7 @@ package interceptors
 
 import (
 	"context"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"time"

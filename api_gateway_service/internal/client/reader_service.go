@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
-	"github.com/AleksK1NG/cqrs-microservices/api_gateway_service/config"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/interceptors"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
+	"github.com/minhwalker/cqrs-microservices/api_gateway_service/config"
+	"github.com/minhwalker/cqrs-microservices/pkg/interceptors"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

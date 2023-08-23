@@ -13,7 +13,7 @@ import (
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion7
 
-// ReaderServiceClient is the client API for ReaderService service.
+// ReaderServiceClient is the client API for ReaderService product.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReaderServiceClient interface {
@@ -77,7 +77,7 @@ func (c *readerServiceClient) DeleteProductByID(ctx context.Context, in *DeleteP
 	return out, nil
 }
 
-// ReaderServiceServer is the server API for ReaderService service.
+// ReaderServiceServer is the server API for ReaderService product.
 // All implementations should embed UnimplementedReaderServiceServer
 // for forward compatibility
 type ReaderServiceServer interface {
@@ -108,7 +108,7 @@ func (UnimplementedReaderServiceServer) DeleteProductByID(context.Context, *Dele
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProductByID not implemented")
 }
 
-// UnsafeReaderServiceServer may be embedded to opt out of forward compatibility for this service.
+// UnsafeReaderServiceServer may be embedded to opt out of forward compatibility for this product.
 // Use of this interface is not recommended, as added methods to ReaderServiceServer will
 // result in compilation errors.
 type UnsafeReaderServiceServer interface {

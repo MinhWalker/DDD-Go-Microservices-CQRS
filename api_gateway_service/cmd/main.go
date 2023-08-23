@@ -2,14 +2,14 @@ package main
 
 import (
 	"flag"
-	"github.com/AleksK1NG/cqrs-microservices/api_gateway_service/config"
-	"github.com/AleksK1NG/cqrs-microservices/api_gateway_service/internal/server"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/api_gateway_service/config"
+	"github.com/minhwalker/cqrs-microservices/api_gateway_service/internal/server"
+	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"log"
 )
 
 // @contact.name Alexander Bryksin
-// @contact.url https://github.com/AleksK1NG
+// @contact.url https://github.com/minhwalker
 // @contact.email alexander.bryksin@yandex.ru
 func main() {
 	flag.Parse()
