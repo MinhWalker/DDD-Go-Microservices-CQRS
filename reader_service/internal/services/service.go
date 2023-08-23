@@ -3,9 +3,9 @@ package services
 import (
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services/product/commands"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services/product/queries"
+	"github.com/minhwalker/cqrs-microservices/repository"
 )
 
 type ProductService struct {
@@ -16,9 +16,9 @@ type ProductService struct {
 func NewProductService(
 	log logger.Logger,
 	cfg *config.Config,
-	mongoRepo product.Repository,
-	redisRepo product.CacheRepository,
-	pgRepo product.Repository,
+	mongoRepo repository.Repository,
+	redisRepo repository.CacheRepository,
+	pgRepo repository.Repository,
 ) *ProductService {
 
 	createProductHandler := commands.NewCreateProductHandler(log, cfg, mongoRepo, redisRepo, pgRepo)

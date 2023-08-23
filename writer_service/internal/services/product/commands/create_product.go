@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
+	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/opentracing/opentracing-go"
 	"time"
 
@@ -24,11 +24,11 @@ type CreateProductCmdHandler interface {
 type createProductHandler struct {
 	log           logger.Logger
 	cfg           *config.Config
-	pgRepo        product.Repository
+	pgRepo        repository.RepositoryWriter
 	kafkaProducer kafkaClient.Producer
 }
 
-func NewCreateProductHandler(log logger.Logger, cfg *config.Config, pgRepo product.Repository, kafkaProducer kafkaClient.Producer) *createProductHandler {
+func NewCreateProductHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter, kafkaProducer kafkaClient.Producer) *createProductHandler {
 	return &createProductHandler{log: log, cfg: cfg, pgRepo: pgRepo, kafkaProducer: kafkaProducer}
 }
 

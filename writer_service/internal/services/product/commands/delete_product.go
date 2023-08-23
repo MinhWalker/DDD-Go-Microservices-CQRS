@@ -6,8 +6,8 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
+	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
 	"github.com/opentracing/opentracing-go"
 	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
@@ -21,11 +21,11 @@ type DeleteProductCmdHandler interface {
 type deleteProductHandler struct {
 	log           logger.Logger
 	cfg           *config.Config
-	pgRepo        product.Repository
+	pgRepo        repository.RepositoryWriter
 	kafkaProducer kafkaClient.Producer
 }
 
-func NewDeleteProductHandler(log logger.Logger, cfg *config.Config, pgRepo product.Repository, kafkaProducer kafkaClient.Producer) *deleteProductHandler {
+func NewDeleteProductHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter, kafkaProducer kafkaClient.Producer) *deleteProductHandler {
 	return &deleteProductHandler{log: log, cfg: cfg, pgRepo: pgRepo, kafkaProducer: kafkaProducer}
 }
 
@@ -33,7 +33,7 @@ func (c *deleteProductHandler) Handle(ctx context.Context, command *DeleteProduc
 	span, ctx := opentracing.StartSpanFromContext(ctx, "deleteProductHandler.Handle")
 	defer span.Finish()
 
-	if err := c.pgRepo.DeleteProductByID(ctx, command.ProductID); err != nil {
+	if err := c.pgRepo.DeleteProduct(ctx, command.ProductID); err != nil {
 		return err
 	}
 

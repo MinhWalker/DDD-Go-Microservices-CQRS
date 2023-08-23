@@ -1,4 +1,4 @@
-package product
+package repository
 
 import (
 	"context"
@@ -8,12 +8,8 @@ import (
 )
 
 type Repository interface {
-	CreateProduct(ctx context.Context, product *models.Product) (*models.Product, error)
-	UpdateProduct(ctx context.Context, product *models.Product) (*models.Product, error)
-	DeleteProduct(ctx context.Context, uuid uuid.UUID) error
-
-	GetProductById(ctx context.Context, uuid uuid.UUID) (*models.Product, error)
-	Search(ctx context.Context, search string, pagination *utils.Pagination) (*models.ProductsList, error)
+	RepositoryReader
+	RepositoryWriter
 }
 
 type RepositoryReader interface {
@@ -25,6 +21,8 @@ type RepositoryWriter interface {
 	CreateProduct(ctx context.Context, product *models.Product) (*models.Product, error)
 	UpdateProduct(ctx context.Context, product *models.Product) (*models.Product, error)
 	DeleteProduct(ctx context.Context, uuid uuid.UUID) error
+
+	GetProductById(ctx context.Context, uuid uuid.UUID) (*models.Product, error)
 }
 
 type CacheRepository interface {

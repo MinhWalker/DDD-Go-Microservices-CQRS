@@ -2,11 +2,11 @@ package queries
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/repository"
 
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
 )
 
 type SearchProductHandler interface {
@@ -16,12 +16,12 @@ type SearchProductHandler interface {
 type searchProductHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo product.Repository
-	redisRepo product.CacheRepository
-	pgRepo    product.Repository
+	mongoRepo repository.Repository
+	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewSearchProductHandler(log logger.Logger, cfg *config.Config, mongoRepo product.Repository, redisRepo product.CacheRepository, pgRepo product.Repository) *searchProductHandler {
+func NewSearchProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *searchProductHandler {
 	return &searchProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 

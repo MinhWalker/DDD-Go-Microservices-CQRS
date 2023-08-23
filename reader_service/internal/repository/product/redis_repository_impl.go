@@ -7,6 +7,7 @@ import (
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 )
@@ -21,7 +22,7 @@ type redisRepository struct {
 	redisClient redis.UniversalClient
 }
 
-func NewRedisRepository(log logger.Logger, cfg *config.Config, redisClient redis.UniversalClient) *redisRepository {
+func NewRedisRepository(log logger.Logger, cfg *config.Config, redisClient redis.UniversalClient) repository.CacheRepository {
 	return &redisRepository{log: log, cfg: cfg, redisClient: redisClient}
 }
 

@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
+	"github.com/minhwalker/cqrs-microservices/repository"
 	"time"
 
 	"github.com/minhwalker/cqrs-microservices/models"
@@ -25,11 +25,11 @@ type UpdateProductCmdHandler interface {
 type updateProductHandler struct {
 	log           logger.Logger
 	cfg           *config.Config
-	pgRepo        product.Repository
+	pgRepo        repository.RepositoryWriter
 	kafkaProducer kafkaClient.Producer
 }
 
-func NewUpdateProductHandler(log logger.Logger, cfg *config.Config, pgRepo product.Repository, kafkaProducer kafkaClient.Producer) *updateProductHandler {
+func NewUpdateProductHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter, kafkaProducer kafkaClient.Producer) *updateProductHandler {
 	return &updateProductHandler{log: log, cfg: cfg, pgRepo: pgRepo, kafkaProducer: kafkaProducer}
 }
 

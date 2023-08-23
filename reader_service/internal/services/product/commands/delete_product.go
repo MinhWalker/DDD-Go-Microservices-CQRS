@@ -2,11 +2,10 @@ package commands
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/repository"
 
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
-
 	"github.com/opentracing/opentracing-go"
 )
 
@@ -17,12 +16,12 @@ type DeleteProductCmdHandler interface {
 type deleteProductCmdHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo product.Repository
-	redisRepo product.CacheRepository
-	pgRepo    product.Repository
+	mongoRepo repository.Repository
+	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewDeleteProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo product.Repository, redisRepo product.CacheRepository, pgRepo product.Repository) *deleteProductCmdHandler {
+func NewDeleteProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *deleteProductCmdHandler {
 	return &deleteProductCmdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 

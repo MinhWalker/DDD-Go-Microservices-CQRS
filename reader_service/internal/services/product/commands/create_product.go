@@ -2,12 +2,11 @@ package commands
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/repository"
 
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
-
 	"github.com/opentracing/opentracing-go"
 	uuid "github.com/satori/go.uuid"
 )
@@ -19,12 +18,12 @@ type CreateProductCmdHandler interface {
 type createProductHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo product.Repository
-	redisRepo product.CacheRepository
-	pgRepo    product.Repository
+	mongoRepo repository.Repository
+	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewCreateProductHandler(log logger.Logger, cfg *config.Config, mongoRepo product.Repository, redisRepo product.CacheRepository, pgRepo product.Repository) CreateProductCmdHandler {
+func NewCreateProductHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) CreateProductCmdHandler {
 	return &createProductHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 

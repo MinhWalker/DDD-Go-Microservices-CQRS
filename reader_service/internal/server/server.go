@@ -2,9 +2,10 @@ package server
 
 import (
 	"context"
-	"github.com/go-playground/validator"
-	"github.com/go-redis/redis/v8"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/minhwalker/cqrs-microservices/pkg/interceptors"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
@@ -17,13 +18,14 @@ import (
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
 	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services"
+
+	"github.com/go-playground/validator"
+	"github.com/go-redis/redis/v8"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
 	"go.mongodb.org/mongo-driver/mongo"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type server struct {

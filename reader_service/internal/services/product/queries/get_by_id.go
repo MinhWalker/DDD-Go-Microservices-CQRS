@@ -2,12 +2,11 @@ package queries
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/repository"
 
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
-
 	"github.com/opentracing/opentracing-go"
 )
 
@@ -18,12 +17,12 @@ type GetProductByIdHandler interface {
 type getProductByIdHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo product.Repository
-	redisRepo product.CacheRepository
-	pgRepo    product.Repository
+	mongoRepo repository.Repository
+	redisRepo repository.CacheRepository
+	pgRepo    repository.Repository
 }
 
-func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo product.Repository, redisRepo product.CacheRepository, pgRepo product.Repository) *getProductByIdHandler {
+func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *getProductByIdHandler {
 	return &getProductByIdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 

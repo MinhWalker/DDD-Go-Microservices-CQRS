@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
 )
 
 type GetProductByIdHandler interface {
@@ -15,10 +15,10 @@ type GetProductByIdHandler interface {
 type getProductByIdHandler struct {
 	log    logger.Logger
 	cfg    *config.Config
-	pgRepo product.Repository
+	pgRepo repository.RepositoryWriter
 }
 
-func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, pgRepo product.Repository) *getProductByIdHandler {
+func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter) *getProductByIdHandler {
 	return &getProductByIdHandler{log: log, cfg: cfg, pgRepo: pgRepo}
 }
 
