@@ -77,7 +77,7 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 ├── api_gateway_service
 │   ├── cmd
 │   │   └── main.go
-│   ├── config                            
+│   ├── config
 │   │   ├── config.go
 │   │   └── config.yaml
 │   └── internal
@@ -114,8 +114,6 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 │           ├── http.go
 │           ├── server.go
 │           └── utils.go
-├── diagram
-│   └── system_diagram.svg
 ├── docker
 │   ├── api_gateway.Dockerfile
 │   ├── reader_service.Dockerfile
@@ -124,13 +122,21 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 ├── docker-compose.yaml
 ├── docs
 │   ├── docs.go
+│   ├── resource
+│   │   ├── CQRS_diagram.svg
+│   │   └── DDD_go.postman_collection.json
 │   ├── swagger.json
 │   └── swagger.yaml
 ├── go.mod
 ├── go.sum
+├── main
 ├── migrations
 │   ├── 01_microservices_tables_init.down.sql
-│   └── 01_microservices_tables_init.up.sql
+│   ├── 01_microservices_tables_init.up.sql
+│   └── mongo
+│       └── init.js
+├── models
+│   └── product.go
 ├── monitoring
 │   ├── prometheus.yml
 │   └── prometheus_docker.yml
@@ -179,35 +185,40 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 │   │   ├── config.go
 │   │   └── config.yaml
 │   ├── internal
+│   │   ├── delivery
+│   │   │   ├── grpc
+│   │   │   │   └── grpc_service_product.go
+│   │   │   └── kafka
+│   │   │       ├── consumer_group.go
+│   │   │       ├── create_product_consumer.go
+│   │   │       ├── delete_product_consumer.go
+│   │   │       ├── update_product_consumer.go
+│   │   │       └── utils.go
+│   │   ├── dto
+│   │   │   └── product
+│   │   │       ├── commands_dto.go
+│   │   │       └── queries_dto.go
+│   │   ├── handler
+│   │   │   ├── product_usecase
+│   │   │   │   ├── commands
+│   │   │   │   │   ├── commands.go
+│   │   │   │   │   ├── create_product.go
+│   │   │   │   │   ├── delete_product.go
+│   │   │   │   │   └── update_product.go
+│   │   │   │   └── queries
+│   │   │   │       ├── get_by_id.go
+│   │   │   │       ├── queries.go
+│   │   │   │       └── search.go
+│   │   │   └── service.go
 │   │   ├── metrics
-│   │   │   └── metrics.go
-│   │   ├── models
-│   │   │   └── product.go
-│   │   ├── product
-│   │   │   ├── commands
-│   │   │   │   ├── commands.go
-│   │   │   │   ├── create_product.go
-│   │   │   │   ├── delete_product.go
-│   │   │   │   └── update_product.go
-│   │   │   ├── delivery
-│   │   │   │   ├── grpc
-│   │   │   │   │   └── grpc_service.go
-│   │   │   │   └── kafka
-│   │   │   │       ├── consumer_group.go
-│   │   │   │       ├── create_product_consumer.go
-│   │   │   │       ├── delete_product_consumer.go
-│   │   │   │       ├── update_product_consumer.go
-│   │   │   │       └── utils.go
-│   │   │   ├── queries
-│   │   │   │   ├── get_by_id.go
-│   │   │   │   ├── queries.go
-│   │   │   │   └── search.go
-│   │   │   ├── repository
-│   │   │   │   ├── mongo_repository.go
-│   │   │   │   ├── redis_repository.go
-│   │   │   │   └── repository.go
-│   │   │   └── service
-│   │   │       └── service.go
+│   │   │   └── product_metrics.go
+│   │   ├── repository
+│   │   │   └── product
+│   │   │       ├── mongo_repository_impl.go
+│   │   │       ├── pg_repository_impl.go
+│   │   │       ├── redis_repository_impl.go
+│   │   │       ├── repository.go
+│   │   │       └── sql_queries.go
 │   │   └── server
 │   │       ├── grpc_server.go
 │   │       ├── server.go
@@ -219,8 +230,6 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 │           ├── product_reader_grpc.pb.go
 │           ├── product_reader_messages.pb.go
 │           └── product_reader_messages.proto
-├── scripts
-│   └── init.js
 └── writer_service
     ├── cmd
     │   └── main.go
@@ -228,34 +237,37 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
     │   ├── config.go
     │   └── config.yaml
     ├── internal
-    │   ├── metrics
-    │   │   └── metrics.go
-    │   ├── models
-    │   │   └── product.go
-    │   ├── product
-    │   │   ├── commands
-    │   │   │   ├── commands.go
-    │   │   │   ├── create_product.go
-    │   │   │   ├── delete_product.go
-    │   │   │   └── update_product.go
-    │   │   ├── delivery
-    │   │   │   ├── grpc
-    │   │   │   │   └── grpc_service.go
-    │   │   │   └── kafka
-    │   │   │       ├── consumer_group.go
-    │   │   │       ├── create_product_consumer.go
-    │   │   │       ├── delete_product_consumer.go
-    │   │   │       ├── update_product_consumer.go
-    │   │   │       └── utils.go
-    │   │   ├── queries
-    │   │   │   ├── get_product_by_id.go
-    │   │   │   └── queries.go
-    │   │   ├── repository
-    │   │   │   ├── pg_repository.go
-    │   │   │   ├── repository.go
-    │   │   │   └── sql_queries.go
-    │   │   └── service
+    │   ├── delivery
+    │   │   ├── grpc
+    │   │   │   └── grpc_service_product.go
+    │   │   └── kafka
+    │   │       ├── consumer_group.go
+    │   │       ├── create_product_consumer.go
+    │   │       ├── delete_product_consumer.go
+    │   │       ├── update_product_consumer.go
+    │   │       └── utils.go
+    │   ├── dto
+    │   │   └── product
+    │   │       ├── commands.go
+    │   │       └── queries.go
+    │   ├── handler
+    │   │   └── product_usecase
+    │   │       ├── commands
+    │   │       │   ├── commands.go
+    │   │       │   ├── create_product.go
+    │   │       │   ├── delete_product.go
+    │   │       │   └── update_product.go
+    │   │       ├── queries
+    │   │       │   ├── get_product_by_id.go
+    │   │       │   └── queries.go
     │   │       └── service.go
+    │   ├── metrics
+    │   │   └── product_metrics.go
+    │   ├── repository
+    │   │   └── product
+    │   │       ├── pg_repository_impl.go
+    │   │       ├── repository.go
+    │   │       └── sql_queries.go
     │   └── server
     │       ├── grpc_server.go
     │       ├── server.go
