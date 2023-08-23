@@ -70,7 +70,7 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 
 ### Overview
 
-![CQRS_diagram.svg](diagram%2FCQRS_diagram.svg)
+![CQRS_diagram.svg](resource%2FCQRS_diagram.svg)
 
 ### Project structure
 ```
