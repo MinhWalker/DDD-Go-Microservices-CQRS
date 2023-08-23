@@ -5,8 +5,8 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services"
 	"github.com/segmentio/kafka-go"
 	"sync"
 )
@@ -19,11 +19,11 @@ type readerMessageProcessor struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *services.ProductService
+	ps      *handler.ProductService
 	metrics *metrics.ReaderServiceMetrics
 }
 
-func NewReaderMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *services.ProductService, metrics *metrics.ReaderServiceMetrics) *readerMessageProcessor {
+func NewReaderMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *handler.ProductService, metrics *metrics.ReaderServiceMetrics) *readerMessageProcessor {
 	return &readerMessageProcessor{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 

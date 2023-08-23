@@ -1,19 +1,9 @@
-package queries
+package dto
 
 import (
 	"github.com/minhwalker/cqrs-microservices/pkg/utils"
-
 	uuid "github.com/satori/go.uuid"
 )
-
-type ProductQueries struct {
-	GetProductById GetProductByIdHandler
-	SearchProduct  SearchProductHandler
-}
-
-func NewProductQueries(getProductById GetProductByIdHandler, searchProduct SearchProductHandler) *ProductQueries {
-	return &ProductQueries{GetProductById: getProductById, SearchProduct: searchProduct}
-}
 
 type GetProductByIdQuery struct {
 	ProductID uuid.UUID `json:"productId" bson:"_id,omitempty"`

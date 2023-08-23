@@ -2,31 +2,33 @@ package queries
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/repository"
 
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
+
 	"github.com/opentracing/opentracing-go"
 )
 
 type GetProductByIdHandler interface {
-	Handle(ctx context.Context, query *GetProductByIdQuery) (*models.Product, error)
+	Handle(ctx context.Context, query *dto.GetProductByIdQuery) (*models.Product, error)
 }
 
 type getProductByIdHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo repository.Repository
+	mongoRepo repository.RepositoryReader
 	redisRepo repository.CacheRepository
-	pgRepo    repository.Repository
+	pgRepo    repository.RepositoryReader
 }
 
-func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *getProductByIdHandler {
+func NewGetProductByIdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.RepositoryReader, redisRepo repository.CacheRepository, pgRepo repository.RepositoryReader) *getProductByIdHandler {
 	return &getProductByIdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
-func (q *getProductByIdHandler) Handle(ctx context.Context, query *GetProductByIdQuery) (*models.Product, error) {
+func (q *getProductByIdHandler) Handle(ctx context.Context, query *dto.GetProductByIdQuery) (*models.Product, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "getProductByIdHandler.Handle")
 	defer span.Finish()
 

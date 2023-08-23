@@ -29,23 +29,23 @@ func NewApiGatewayMetrics(cfg *config.Config) *ApiGatewayMetrics {
 		}),
 		CreateProductHttpRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_create_product_http_requests_total", cfg.ServiceName),
-			Help: "The total number of create product http requests",
+			Help: "The total number of create product_usecase http requests",
 		}),
 		UpdateProductHttpRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_update_product_http_requests_total", cfg.ServiceName),
-			Help: "The total number of update product http requests",
+			Help: "The total number of update product_usecase http requests",
 		}),
 		DeleteProductHttpRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_delete_product_http_requests_total", cfg.ServiceName),
-			Help: "The total number of delete product http requests",
+			Help: "The total number of delete product_usecase http requests",
 		}),
 		GetProductByIdHttpRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_get_product_by_id_http_requests_total", cfg.ServiceName),
-			Help: "The total number of get product by id http requests",
+			Help: "The total number of get product_usecase by id http requests",
 		}),
 		SearchProductHttpRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_search_product_http_requests_total", cfg.ServiceName),
-			Help: "The total number of search product http requests",
+			Help: "The total number of search product_usecase http requests",
 		}),
 	}
 }

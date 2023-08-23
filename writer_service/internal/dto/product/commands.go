@@ -1,16 +1,6 @@
-package commands
+package dto
 
 import uuid "github.com/satori/go.uuid"
-
-type ProductCommands struct {
-	CreateProduct CreateProductCmdHandler
-	UpdateProduct UpdateProductCmdHandler
-	DeleteProduct DeleteProductCmdHandler
-}
-
-func NewProductCommands(createProduct CreateProductCmdHandler, updateProduct UpdateProductCmdHandler, deleteProduct DeleteProductCmdHandler) *ProductCommands {
-	return &ProductCommands{CreateProduct: createProduct, UpdateProduct: updateProduct, DeleteProduct: deleteProduct}
-}
 
 type CreateProductCommand struct {
 	ProductID   uuid.UUID `json:"productId" validate:"required"`

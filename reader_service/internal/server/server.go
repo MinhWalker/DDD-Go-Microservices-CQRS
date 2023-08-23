@@ -15,9 +15,9 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	readerKafka "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/kafka"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
 	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services"
 
 	"github.com/go-playground/validator"
 	"github.com/go-redis/redis/v8"
@@ -37,7 +37,7 @@ type server struct {
 	mongoClient *mongo.Client
 	redisClient redis.UniversalClient
 	pgConn      *pgxpool.Pool
-	ps          *services.ProductService
+	ps          *handler.ProductService
 	metrics     *metrics.ReaderServiceMetrics
 }
 
@@ -77,7 +77,7 @@ func (s *server) Run() error {
 	mongoRepo := product2.NewMongoRepository(s.log, s.cfg, s.mongoClient)
 	redisRepo := product2.NewRedisRepository(s.log, s.cfg, s.redisClient)
 
-	s.ps = services.NewProductService(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
+	s.ps = handler.NewProductService(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
 
 	readerMessageProcessor := readerKafka.NewReaderMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 

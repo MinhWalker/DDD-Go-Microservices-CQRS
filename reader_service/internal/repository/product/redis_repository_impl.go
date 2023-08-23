@@ -1,4 +1,4 @@
-package product
+package repository
 
 import (
 	"context"
@@ -7,13 +7,12 @@ import (
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 )
 
 const (
-	redisProductPrefixKey = "reader:product"
+	redisProductPrefixKey = "reader:product_usecase"
 )
 
 type redisRepository struct {
@@ -22,7 +21,7 @@ type redisRepository struct {
 	redisClient redis.UniversalClient
 }
 
-func NewRedisRepository(log logger.Logger, cfg *config.Config, redisClient redis.UniversalClient) repository.CacheRepository {
+func NewRedisRepository(log logger.Logger, cfg *config.Config, redisClient redis.UniversalClient) CacheRepository {
 	return &redisRepository{log: log, cfg: cfg, redisClient: redisClient}
 }
 

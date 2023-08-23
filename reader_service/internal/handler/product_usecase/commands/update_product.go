@@ -2,32 +2,34 @@ package commands
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/repository"
+	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
 
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
+
 	"github.com/opentracing/opentracing-go"
 	uuid "github.com/satori/go.uuid"
 )
 
 type UpdateProductCmdHandler interface {
-	Handle(ctx context.Context, command *UpdateProductCommand) error
+	Handle(ctx context.Context, command *dto.UpdateProductCommand) error
 }
 
 type updateProductCmdHandler struct {
 	log       logger.Logger
 	cfg       *config.Config
-	mongoRepo repository.Repository
+	mongoRepo repository.RepositoryReader
 	redisRepo repository.CacheRepository
-	pgRepo    repository.Repository
+	pgRepo    repository.RepositoryReader
 }
 
-func NewUpdateProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.Repository, redisRepo repository.CacheRepository, pgRepo repository.Repository) *updateProductCmdHandler {
+func NewUpdateProductCmdHandler(log logger.Logger, cfg *config.Config, mongoRepo repository.RepositoryReader, redisRepo repository.CacheRepository, pgRepo repository.RepositoryReader) *updateProductCmdHandler {
 	return &updateProductCmdHandler{log: log, cfg: cfg, mongoRepo: mongoRepo, redisRepo: redisRepo, pgRepo: pgRepo}
 }
 
-func (c *updateProductCmdHandler) Handle(ctx context.Context, command *UpdateProductCommand) error {
+func (c *updateProductCmdHandler) Handle(ctx context.Context, command *dto.UpdateProductCommand) error {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "updateProductCmdHandler.Handle")
 	defer span.Finish()
 

@@ -2,8 +2,8 @@ package commands
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/repository"
-	"github.com/opentracing/opentracing-go"
+	dto "github.com/minhwalker/cqrs-microservices/writer_service/internal/dto/product"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
 	"time"
 
 	"github.com/minhwalker/cqrs-microservices/models"
@@ -13,44 +13,46 @@ import (
 	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	"github.com/minhwalker/cqrs-microservices/writer_service/mappers"
+
+	"github.com/opentracing/opentracing-go"
 	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
 )
 
-type CreateProductCmdHandler interface {
-	Handle(ctx context.Context, command *CreateProductCommand) error
+type UpdateProductCmdHandler interface {
+	Handle(ctx context.Context, command *dto.UpdateProductCommand) error
 }
 
-type createProductHandler struct {
+type updateProductHandler struct {
 	log           logger.Logger
 	cfg           *config.Config
 	pgRepo        repository.RepositoryWriter
 	kafkaProducer kafkaClient.Producer
 }
 
-func NewCreateProductHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter, kafkaProducer kafkaClient.Producer) *createProductHandler {
-	return &createProductHandler{log: log, cfg: cfg, pgRepo: pgRepo, kafkaProducer: kafkaProducer}
+func NewUpdateProductHandler(log logger.Logger, cfg *config.Config, pgRepo repository.RepositoryWriter, kafkaProducer kafkaClient.Producer) *updateProductHandler {
+	return &updateProductHandler{log: log, cfg: cfg, pgRepo: pgRepo, kafkaProducer: kafkaProducer}
 }
 
-func (c *createProductHandler) Handle(ctx context.Context, command *CreateProductCommand) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "createProductHandler.Handle")
+func (c *updateProductHandler) Handle(ctx context.Context, command *dto.UpdateProductCommand) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "updateProductHandler.Handle")
 	defer span.Finish()
 
 	productDto := &models.Product{ProductID: command.ProductID, Name: command.Name, Description: command.Description, Price: command.Price}
 
-	product, err := c.pgRepo.CreateProduct(ctx, productDto)
+	product, err := c.pgRepo.UpdateProduct(ctx, productDto)
 	if err != nil {
 		return err
 	}
 
-	msg := &kafkaMessages.ProductCreated{Product: mappers.ProductToGrpcMessage(product)}
+	msg := &kafkaMessages.ProductUpdated{Product: mappers.ProductToGrpcMessage(product)}
 	msgBytes, err := proto.Marshal(msg)
 	if err != nil {
 		return err
 	}
 
 	message := kafka.Message{
-		Topic:   c.cfg.KafkaTopics.ProductCreated.TopicName,
+		Topic:   c.cfg.KafkaTopics.ProductUpdated.TopicName,
 		Value:   msgBytes,
 		Time:    time.Now().UTC(),
 		Headers: tracing.GetKafkaTracingHeadersFromSpanCtx(span.Context()),

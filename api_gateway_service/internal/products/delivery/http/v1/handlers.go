@@ -44,8 +44,8 @@ func NewProductsHandlers(
 
 // CreateProduct
 // @Tags Products
-// @Summary Create product
-// @Description Create new product item
+// @Summary Create product_usecase
+// @Description Create new product_usecase item
 // @Accept json
 // @Produce json
 // @Success 201 {object} dto.CreateProductResponseDto
@@ -84,8 +84,8 @@ func (h *productsHandlers) CreateProduct() echo.HandlerFunc {
 
 // GetProductByID
 // @Tags Products
-// @Summary Get product
-// @Description Get product by id
+// @Summary Get product_usecase
+// @Description Get product_usecase by id
 // @Accept json
 // @Produce json
 // @Param id path string true "Product ID"
@@ -120,8 +120,8 @@ func (h *productsHandlers) GetProductByID() echo.HandlerFunc {
 
 // SearchProduct
 // @Tags Products
-// @Summary Search product
-// @Description Get product by name with pagination
+// @Summary Search product_usecase
+// @Description Get product_usecase by name with pagination
 // @Accept json
 // @Produce json
 // @Param search query string false "search text"
@@ -153,8 +153,8 @@ func (h *productsHandlers) SearchProduct() echo.HandlerFunc {
 
 // UpdateProduct
 // @Tags Products
-// @Summary Update product
-// @Description Update existing product
+// @Summary Update product_usecase
+// @Description Update existing product_usecase
 // @Accept json
 // @Produce json
 // @Param id path string true "Product ID"
@@ -200,8 +200,8 @@ func (h *productsHandlers) UpdateProduct() echo.HandlerFunc {
 
 // DeleteProduct
 // @Tags Products
-// @Summary Delete product
-// @Description Delete existing product
+// @Summary Delete product_usecase
+// @Description Delete existing product_usecase
 // @Accept json
 // @Produce json
 // @Success 200 ""

@@ -71,7 +71,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create new product item
+      description: Create new product_usecase item
       produces:
       - application/json
       responses:
@@ -79,14 +79,14 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/dto.CreateProductResponseDto'
-      summary: Create product
+      summary: Create product_usecase
       tags:
       - Products
   /products/{id}:
     delete:
       consumes:
       - application/json
-      description: Delete existing product
+      description: Delete existing product_usecase
       parameters:
       - description: Product ID
         in: path
@@ -98,13 +98,13 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Delete product
+      summary: Delete product_usecase
       tags:
       - Products
     get:
       consumes:
       - application/json
-      description: Get product by id
+      description: Get product_usecase by id
       parameters:
       - description: Product ID
         in: path
@@ -118,13 +118,13 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.ProductResponse'
-      summary: Get product
+      summary: Get product_usecase
       tags:
       - Products
     put:
       consumes:
       - application/json
-      description: Update existing product
+      description: Update existing product_usecase
       parameters:
       - description: Product ID
         in: path
@@ -138,14 +138,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.UpdateProductDto'
-      summary: Update product
+      summary: Update product_usecase
       tags:
       - Products
   /products/search:
     get:
       consumes:
       - application/json
-      description: Get product by name with pagination
+      description: Get product_usecase by name with pagination
       parameters:
       - description: search text
         in: query
@@ -166,7 +166,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.ProductsListResponse'
-      summary: Search product
+      summary: Search product_usecase
       tags:
       - Products
 swagger: "2.0"

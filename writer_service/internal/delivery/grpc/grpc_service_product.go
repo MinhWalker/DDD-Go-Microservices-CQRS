@@ -6,10 +6,9 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
+	dto "github.com/minhwalker/cqrs-microservices/writer_service/internal/dto/product"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product/commands"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product/queries"
 	"github.com/minhwalker/cqrs-microservices/writer_service/mappers"
 	"github.com/minhwalker/cqrs-microservices/writer_service/proto/product_writer"
 	uuid "github.com/satori/go.uuid"
@@ -21,11 +20,11 @@ type grpcService struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *product.ProductService
+	ps      *product_usecase.ProductService
 	metrics *product2.WriterServiceMetrics
 }
 
-func NewWriterGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product.ProductService, metrics *product2.WriterServiceMetrics) *grpcService {
+func NewWriterGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product_usecase.ProductService, metrics *product2.WriterServiceMetrics) *grpcService {
 	return &grpcService{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 
@@ -41,7 +40,7 @@ func (s *grpcService) CreateProduct(ctx context.Context, req *writerService.Crea
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	command := commands.NewCreateProductCommand(productUUID, req.GetName(), req.GetDescription(), req.GetPrice())
+	command := dto.NewCreateProductCommand(productUUID, req.GetName(), req.GetDescription(), req.GetPrice())
 	if err := s.v.StructCtx(ctx, command); err != nil {
 		s.log.WarnMsg("validate", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)
@@ -69,7 +68,7 @@ func (s *grpcService) UpdateProduct(ctx context.Context, req *writerService.Upda
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	command := commands.NewUpdateProductCommand(productUUID, req.GetName(), req.GetDescription(), req.GetPrice())
+	command := dto.NewUpdateProductCommand(productUUID, req.GetName(), req.GetDescription(), req.GetPrice())
 	if err := s.v.StructCtx(ctx, command); err != nil {
 		s.log.WarnMsg("validate", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)
@@ -97,7 +96,7 @@ func (s *grpcService) GetProductById(ctx context.Context, req *writerService.Get
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	query := queries.NewGetProductByIdQuery(productUUID)
+	query := dto.NewGetProductByIdQuery(productUUID)
 	if err := s.v.StructCtx(ctx, query); err != nil {
 		s.log.WarnMsg("validate", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)

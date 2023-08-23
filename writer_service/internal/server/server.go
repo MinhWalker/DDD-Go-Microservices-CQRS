@@ -11,9 +11,9 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	kafkaConsumer "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/kafka"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase"
 	product3 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
@@ -27,7 +27,7 @@ type server struct {
 	cfg       *config.Config
 	v         *validator.Validate
 	kafkaConn *kafka.Conn
-	ps        *product.ProductService
+	ps        *product_usecase.ProductService
 	im        interceptors.InterceptorManager
 	pgConn    *pgxpool.Pool
 	metrics   *product3.WriterServiceMetrics
@@ -56,7 +56,7 @@ func (s *server) Run() error {
 	defer kafkaProducer.Close() // nolint: errcheck
 
 	productRepo := product2.NewProductRepository(s.log, s.cfg, pgxConn)
-	s.ps = product.NewProductService(s.log, s.cfg, productRepo, kafkaProducer)
+	s.ps = product_usecase.NewProductService(s.log, s.cfg, productRepo, kafkaProducer)
 	productMessageProcessor := kafkaConsumer.NewProductMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 
 	s.log.Info("Starting Writer Kafka consumers")

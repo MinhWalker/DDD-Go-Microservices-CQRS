@@ -5,7 +5,7 @@ import (
 	"github.com/avast/retry-go"
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/services/product/commands"
+	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
 	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
 )
@@ -24,7 +24,7 @@ func (s *readerMessageProcessor) processProductUpdated(ctx context.Context, r *k
 	}
 
 	p := msg.GetProduct()
-	command := commands.NewUpdateProductCommand(p.GetProductID(), p.GetName(), p.GetDescription(), p.GetPrice(), p.GetUpdatedAt().AsTime())
+	command := dto.NewUpdateProductCommand(p.GetProductID(), p.GetName(), p.GetDescription(), p.GetPrice(), p.GetUpdatedAt().AsTime())
 	if err := s.v.StructCtx(ctx, command); err != nil {
 		s.log.WarnMsg("validate", err)
 		s.commitErrMessage(ctx, r, m)

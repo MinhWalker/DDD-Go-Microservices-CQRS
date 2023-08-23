@@ -1,4 +1,4 @@
-package product
+package repository
 
 const (
 	createProductQuery = `INSERT INTO products (product_id, name, description, price, created_at, updated_at) 

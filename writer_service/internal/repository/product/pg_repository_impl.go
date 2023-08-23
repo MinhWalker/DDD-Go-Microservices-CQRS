@@ -1,11 +1,10 @@
-package product
+package repository
 
 import (
 	"context"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/minhwalker/cqrs-microservices/models"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
@@ -18,7 +17,7 @@ type productRepository struct {
 	db  *pgxpool.Pool
 }
 
-func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) repository.RepositoryWriter {
+func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) RepositoryWriter {
 	return &productRepository{log: log, cfg: cfg, db: db}
 }
 

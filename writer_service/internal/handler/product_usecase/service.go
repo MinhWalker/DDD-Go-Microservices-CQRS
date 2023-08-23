@@ -1,12 +1,12 @@
-package product
+package product_usecase
 
 import (
 	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	commands2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product/commands"
-	queries2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product/queries"
+	commands2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase/commands"
+	queries2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase/queries"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/repository/product"
 )
 
 type ProductService struct {

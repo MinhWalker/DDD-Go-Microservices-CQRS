@@ -1,4 +1,4 @@
-package product
+package repository
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/pkg/utils"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
@@ -21,7 +20,7 @@ type productRepository struct {
 	db  *pgxpool.Pool
 }
 
-func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) repository.Repository {
+func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) RepositoryReader {
 	return &productRepository{log: log, cfg: cfg, db: db}
 }
 

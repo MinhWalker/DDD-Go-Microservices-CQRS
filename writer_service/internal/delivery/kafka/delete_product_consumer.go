@@ -5,7 +5,7 @@ import (
 	"github.com/avast/retry-go"
 	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/services/product/commands"
+	dto "github.com/minhwalker/cqrs-microservices/writer_service/internal/dto/product"
 	uuid "github.com/satori/go.uuid"
 	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
@@ -31,7 +31,7 @@ func (s *productMessageProcessor) processDeleteProduct(ctx context.Context, r *k
 		return
 	}
 
-	command := commands.NewDeleteProductCommand(proUUID)
+	command := dto.NewDeleteProductCommand(proUUID)
 	if err := s.v.StructCtx(ctx, command); err != nil {
 		s.log.WarnMsg("validate", err)
 		s.commitErrMessage(ctx, r, m)

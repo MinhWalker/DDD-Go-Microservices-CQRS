@@ -59,7 +59,7 @@ mongo:
 mongoCollections:
   products: products
 serviceSettings:
-  redisProductPrefixKey: "reader:product"
+  redisProductPrefixKey: "reader:product_usecase"
 jaeger:
   enable: true
   serviceName: reader_service

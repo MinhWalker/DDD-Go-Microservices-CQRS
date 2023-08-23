@@ -1,4 +1,4 @@
-package product
+package repository
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/pkg/utils"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/repository"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
@@ -22,7 +21,7 @@ type mongoRepository struct {
 	db  *mongo.Client
 }
 
-func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) repository.Repository {
+func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) RepositoryReader {
 	return &mongoRepository{log: log, cfg: cfg, db: db}
 }
 
