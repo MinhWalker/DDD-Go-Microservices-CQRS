@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/server"
 	"log"

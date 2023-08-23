@@ -2,14 +2,12 @@ package queries
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/core/models"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 
-	"github.com/minhwalker/cqrs-microservices/models"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
-
-	"github.com/opentracing/opentracing-go"
 )
 
 type GetProductByIdHandler interface {

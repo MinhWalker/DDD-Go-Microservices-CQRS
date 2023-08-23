@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler/product_usecase/commands"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler/product_usecase/queries"

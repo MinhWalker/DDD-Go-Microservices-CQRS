@@ -2,11 +2,10 @@ package repository
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/models"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/pkg/utils"
+	"github.com/minhwalker/cqrs-microservices/core/models"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 	"go.mongodb.org/mongo-driver/bson"

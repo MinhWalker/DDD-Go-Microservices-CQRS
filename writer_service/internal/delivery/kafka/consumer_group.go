@@ -3,11 +3,10 @@ package kafka
 import (
 	"context"
 	"github.com/go-playground/validator"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
-	"github.com/segmentio/kafka-go"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 	"sync"
 )
 
@@ -19,11 +18,11 @@ type productMessageProcessor struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *product_usecase.ProductService
+	ps      *product.ProductService
 	metrics *product2.WriterServiceMetrics
 }
 
-func NewProductMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product_usecase.ProductService, metrics *product2.WriterServiceMetrics) *productMessageProcessor {
+func NewProductMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product.ProductService, metrics *product2.WriterServiceMetrics) *productMessageProcessor {
 	return &productMessageProcessor{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 

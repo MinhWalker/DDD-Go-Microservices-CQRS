@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/minhwalker/cqrs-microservices/pkg/utils"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	uuid "github.com/satori/go.uuid"
 )
 

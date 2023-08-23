@@ -2,14 +2,13 @@ package commands
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/core/models"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
 
-	"github.com/minhwalker/cqrs-microservices/models"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
 
-	"github.com/opentracing/opentracing-go"
 	uuid "github.com/satori/go.uuid"
 )
 

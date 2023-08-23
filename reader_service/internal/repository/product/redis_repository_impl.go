@@ -3,11 +3,9 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"github.com/go-redis/redis/v8"
-	"github.com/minhwalker/cqrs-microservices/models"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/models"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 )
 

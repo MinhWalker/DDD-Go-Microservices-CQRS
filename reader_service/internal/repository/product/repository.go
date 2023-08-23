@@ -2,10 +2,9 @@ package repository
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/core/models"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	uuid "github.com/satori/go.uuid"
-
-	"github.com/minhwalker/cqrs-microservices/models"
-	"github.com/minhwalker/cqrs-microservices/pkg/utils"
 )
 
 type RepositoryReader interface {

@@ -3,11 +3,10 @@ package kafka
 import (
 	"context"
 	"github.com/go-playground/validator"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
-	"github.com/segmentio/kafka-go"
 	"sync"
 )
 

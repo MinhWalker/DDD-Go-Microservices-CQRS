@@ -3,14 +3,15 @@ package grpc
 import (
 	"context"
 	"github.com/go-playground/validator"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
+	dto2 "github.com/minhwalker/cqrs-microservices/writer_service/app/dto/product"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	dto "github.com/minhwalker/cqrs-microservices/writer_service/internal/dto/product"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/handler/product_usecase"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/dto"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/dto/proto/product_writer"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/mappers"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
-	"github.com/minhwalker/cqrs-microservices/writer_service/mappers"
-	"github.com/minhwalker/cqrs-microservices/writer_service/proto/product_writer"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 	uuid "github.com/satori/go.uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,15 +21,15 @@ type grpcService struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *product_usecase.ProductService
+	ps      *product.ProductService
 	metrics *product2.WriterServiceMetrics
 }
 
-func NewWriterGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product_usecase.ProductService, metrics *product2.WriterServiceMetrics) *grpcService {
+func NewWriterGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product.ProductService, metrics *product2.WriterServiceMetrics) *grpcService {
 	return &grpcService{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 
-func (s *grpcService) CreateProduct(ctx context.Context, req *writerService.CreateProductReq) (*writerService.CreateProductRes, error) {
+func (s *grpcService) CreateProduct(ctx context.Context, req *writerService.writerService) (*writerService.writerService, error) {
 	s.metrics.CreateProductGrpcRequests.Inc()
 
 	ctx, span := tracing.StartGrpcServerTracerSpan(ctx, "grpcService.CreateProduct")
@@ -96,7 +97,7 @@ func (s *grpcService) GetProductById(ctx context.Context, req *writerService.Get
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	query := dto.NewGetProductByIdQuery(productUUID)
+	query := dto2.NewGetProductByIdQuery(productUUID)
 	if err := s.v.StructCtx(ctx, query); err != nil {
 		s.log.WarnMsg("validate", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)

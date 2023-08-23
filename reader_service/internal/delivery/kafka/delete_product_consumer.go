@@ -2,12 +2,10 @@ package kafka
 
 import (
 	"context"
-	"github.com/avast/retry-go"
-	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
-	kafkaMessages "github.com/minhwalker/cqrs-microservices/proto/kafka"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/core/proto/kafka"
 	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
 	uuid "github.com/satori/go.uuid"
-	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,17 +2,17 @@ package server
 
 import (
 	"context"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/interceptors"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/mongodb"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
+	redisClient "github.com/minhwalker/cqrs-microservices/core/pkg/redis"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/minhwalker/cqrs-microservices/pkg/interceptors"
-	kafkaClient "github.com/minhwalker/cqrs-microservices/pkg/kafka"
-	"github.com/minhwalker/cqrs-microservices/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/pkg/mongodb"
-	"github.com/minhwalker/cqrs-microservices/pkg/postgres"
-	redisClient "github.com/minhwalker/cqrs-microservices/pkg/redis"
-	"github.com/minhwalker/cqrs-microservices/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	readerKafka "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/kafka"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
@@ -20,11 +20,8 @@ import (
 	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
 
 	"github.com/go-playground/validator"
-	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
-	"github.com/segmentio/kafka-go"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -32,10 +29,10 @@ type server struct {
 	log         logger.Logger
 	cfg         *config.Config
 	v           *validator.Validate
-	kafkaConn   *kafka.Conn
+	kafkaConn   *kafkaClient.Conn
 	im          interceptors.InterceptorManager
 	mongoClient *mongo.Client
-	redisClient redis.UniversalClient
+	redisClient redisClient.UniversalClient
 	pgConn      *pgxpool.Pool
 	ps          *handler.ProductService
 	metrics     *metrics.ReaderServiceMetrics
