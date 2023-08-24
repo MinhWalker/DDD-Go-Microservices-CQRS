@@ -1,33 +1,22 @@
 package dto
 
-import uuid "github.com/satori/go.uuid"
+import (
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/models"
+	uuid "github.com/satori/go.uuid"
+)
 
-type CreateProductCommand struct {
-	ProductID   uuid.UUID `json:"productId" validate:"required"`
-	Name        string    `json:"name" validate:"required,gte=0,lte=255"`
-	Description string    `json:"description" validate:"required,gte=0,lte=5000"`
-	Price       float64   `json:"price" validate:"required,gte=0"`
+func NewCreateProductCommand(productID uuid.UUID, name string, description string, price float64) *models.CreateProductCommand {
+	return &models.CreateProductCommand{ProductID: productID, Name: name, Description: description, Price: price}
 }
 
-func NewCreateProductCommand(productID uuid.UUID, name string, description string, price float64) *CreateProductCommand {
-	return &CreateProductCommand{ProductID: productID, Name: name, Description: description, Price: price}
+func NewUpdateProductCommand(productID uuid.UUID, name string, description string, price float64) *models.UpdateProductCommand {
+	return &models.UpdateProductCommand{ProductID: productID, Name: name, Description: description, Price: price}
 }
 
-type UpdateProductCommand struct {
-	ProductID   uuid.UUID `json:"productId" validate:"required,gte=0,lte=255"`
-	Name        string    `json:"name" validate:"required,gte=0,lte=255"`
-	Description string    `json:"description" validate:"required,gte=0,lte=5000"`
-	Price       float64   `json:"price" validate:"required,gte=0"`
+func NewDeleteProductCommand(productID uuid.UUID) *models.DeleteProductCommand {
+	return &models.DeleteProductCommand{ProductID: productID}
 }
 
-func NewUpdateProductCommand(productID uuid.UUID, name string, description string, price float64) *UpdateProductCommand {
-	return &UpdateProductCommand{ProductID: productID, Name: name, Description: description, Price: price}
-}
-
-type DeleteProductCommand struct {
-	ProductID uuid.UUID `json:"productId" validate:"required"`
-}
-
-func NewDeleteProductCommand(productID uuid.UUID) *DeleteProductCommand {
-	return &DeleteProductCommand{ProductID: productID}
+func NewGetProductByIdQuery(productID uuid.UUID) *models.GetProductByIdQuery {
+	return &models.GetProductByIdQuery{ProductID: productID}
 }

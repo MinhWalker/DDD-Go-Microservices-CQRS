@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/compress"
 )
 

@@ -6,7 +6,8 @@ import (
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
+	usecase "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
+	"github.com/segmentio/kafka-go"
 	"sync"
 )
 
@@ -18,11 +19,11 @@ type productMessageProcessor struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *product.ProductService
+	ps      usecase.IProductUsecase
 	metrics *product2.WriterServiceMetrics
 }
 
-func NewProductMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *product.ProductService, metrics *product2.WriterServiceMetrics) *productMessageProcessor {
+func NewProductMessageProcessor(log logger.Logger, cfg *config.Config, v *validator.Validate, ps usecase.IProductUsecase, metrics *product2.WriterServiceMetrics) *productMessageProcessor {
 	return &productMessageProcessor{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 

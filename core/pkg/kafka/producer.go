@@ -2,7 +2,10 @@ package kafka
 
 import (
 	"context"
+
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+
+	"github.com/segmentio/kafka-go"
 )
 
 type Producer interface {

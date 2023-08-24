@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"github.com/segmentio/kafka-go"
 )
 
 func (s *productMessageProcessor) commitMessage(ctx context.Context, r *kafka.Reader, m kafka.Message) {

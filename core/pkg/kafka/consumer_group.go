@@ -2,9 +2,12 @@ package kafka
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
-	"github.com/segmentio/kafka-go/compress"
 	"sync"
+
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+
+	"github.com/segmentio/kafka-go"
+	"github.com/segmentio/kafka-go/compress"
 )
 
 // MessageProcessor processor methods must implement kafka.Worker func method interface

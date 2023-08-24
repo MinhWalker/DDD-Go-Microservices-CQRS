@@ -2,10 +2,15 @@ package server
 
 import (
 	"context"
+	usecase "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/go-playground/validator"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/interceptors"
-	"github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
@@ -13,11 +18,10 @@ import (
 	kafkaConsumer "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/kafka"
 	product3 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/repositories/product"
-	"github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
+
+	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
-	"os"
-	"os/signal"
-	"syscall"
+	"github.com/segmentio/kafka-go"
 )
 
 type server struct {
@@ -25,7 +29,7 @@ type server struct {
 	cfg       *config.Config
 	v         *validator.Validate
 	kafkaConn *kafka.Conn
-	ps        *product.ProductService
+	ps        usecase.IProductUsecase
 	im        interceptors.InterceptorManager
 	pgConn    *pgxpool.Pool
 	metrics   *product3.WriterServiceMetrics
@@ -50,15 +54,15 @@ func (s *server) Run() error {
 	s.log.Infof("postgres connected: %v", pgxConn.Stat().TotalConns())
 	defer pgxConn.Close()
 
-	kafkaProducer := kafka.NewProducer(s.log, s.cfg.Kafka.Brokers)
+	kafkaProducer := kafkaClient.NewProducer(s.log, s.cfg.Kafka.Brokers)
 	defer kafkaProducer.Close() // nolint: errcheck
 
 	productRepo := product2.NewProductRepository(s.log, s.cfg, pgxConn)
-	s.ps = product.NewProductService(s.log, s.cfg, productRepo, kafkaProducer)
+	s.ps = usecase.NewProductUsecase(s.log, s.cfg, productRepo, kafkaProducer)
 	productMessageProcessor := kafkaConsumer.NewProductMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 
 	s.log.Info("Starting Writer Kafka consumers")
-	cg := kafka.NewConsumerGroup(s.cfg.Kafka.Brokers, s.cfg.Kafka.GroupID, s.log)
+	cg := kafkaClient.NewConsumerGroup(s.cfg.Kafka.Brokers, s.cfg.Kafka.GroupID, s.log)
 	go cg.ConsumeTopic(ctx, s.getConsumerGroupTopics(), kafkaConsumer.PoolSize, productMessageProcessor.ProcessMessages)
 
 	closeGrpcServer, grpcServer, err := s.newWriterGrpcServer()

@@ -2,6 +2,8 @@ package kafka
 
 import (
 	"context"
+
+	"github.com/segmentio/kafka-go"
 )
 
 // NewKafkaConn create new kafka connection

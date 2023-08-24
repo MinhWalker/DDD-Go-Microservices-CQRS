@@ -2,6 +2,8 @@ package kafka
 
 import (
 	"time"
+
+	"github.com/segmentio/kafka-go"
 )
 
 // NewKafkaReader create new configured kafka reader

@@ -2,10 +2,12 @@ package kafka
 
 import (
 	"context"
+	"github.com/avast/retry-go"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/core/proto/kafka"
 	"github.com/minhwalker/cqrs-microservices/writer_service/internal/dto"
 	uuid "github.com/satori/go.uuid"
+	"github.com/segmentio/kafka-go"
 	"google.golang.org/protobuf/proto"
 	"time"
 )
@@ -47,7 +49,7 @@ func (s *productMessageProcessor) processCreateProduct(ctx context.Context, r *k
 	}
 
 	if err := retry.Do(func() error {
-		return s.ps.Commands.CreateProduct.Handle(ctx, command)
+		return s.ps.Create(ctx, command)
 	}, append(retryOptions, retry.Context(ctx))...); err != nil {
 		s.log.WarnMsg("CreateProduct.Handle", err)
 		s.metrics.ErrorKafkaMessages.Inc()

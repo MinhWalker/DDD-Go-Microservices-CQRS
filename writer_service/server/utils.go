@@ -9,6 +9,7 @@ import (
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/segmentio/kafka-go"
 	"net"
 	"net/http"
 	"strconv"
@@ -47,7 +48,7 @@ func (s *server) initKafkaTopics(ctx context.Context) {
 	controllerURI := net.JoinHostPort(controller.Host, strconv.Itoa(controller.Port))
 	s.log.Infof("kafka controller uri: %s", controllerURI)
 
-	conn, err := kafkaClient.DialContext(ctx, "tcp", controllerURI)
+	conn, err := kafka.DialContext(ctx, "tcp", controllerURI)
 	if err != nil {
 		s.log.WarnMsg("initKafkaTopics.DialContext", err)
 		return
@@ -56,37 +57,37 @@ func (s *server) initKafkaTopics(ctx context.Context) {
 
 	s.log.Infof("established new kafka controller connection: %s", controllerURI)
 
-	productCreateTopic := kafkaClient.TopicConfig{
+	productCreateTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductCreate.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductCreate.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductCreate.ReplicationFactor,
 	}
 
-	productCreatedTopic := kafkaClient.TopicConfig{
+	productCreatedTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductCreated.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductCreated.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductCreated.ReplicationFactor,
 	}
 
-	productUpdateTopic := kafkaClient.TopicConfig{
+	productUpdateTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductUpdate.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductUpdate.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductUpdate.ReplicationFactor,
 	}
 
-	productUpdatedTopic := kafkaClient.TopicConfig{
+	productUpdatedTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductUpdated.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductUpdated.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductUpdated.ReplicationFactor,
 	}
 
-	productDeleteTopic := kafkaClient.TopicConfig{
+	productDeleteTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductDelete.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductDelete.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductDelete.ReplicationFactor,
 	}
 
-	productDeletedTopic := kafkaClient.TopicConfig{
+	productDeletedTopic := kafka.TopicConfig{
 		Topic:             s.cfg.KafkaTopics.ProductDeleted.TopicName,
 		NumPartitions:     s.cfg.KafkaTopics.ProductDeleted.Partitions,
 		ReplicationFactor: s.cfg.KafkaTopics.ProductDeleted.ReplicationFactor,
@@ -104,7 +105,7 @@ func (s *server) initKafkaTopics(ctx context.Context) {
 		return
 	}
 
-	s.log.Infof("kafka topics created or already exists: %+v", []kafkaClient.TopicConfig{productCreateTopic, productUpdateTopic, productCreatedTopic, productUpdatedTopic, productDeleteTopic, productDeletedTopic})
+	s.log.Infof("kafka topics created or already exists: %+v", []kafka.TopicConfig{productCreateTopic, productUpdateTopic, productCreatedTopic, productUpdatedTopic, productDeleteTopic, productDeletedTopic})
 }
 
 func (s *server) getConsumerGroupTopics() []string {

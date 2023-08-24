@@ -17,6 +17,10 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
+func (p *Product) GetProductID() string {
+	return p.ProductID.String()
+}
+
 // ProductsList products list response with pagination
 type ProductsList struct {
 	TotalCount int64      `json:"totalCount" bson:"totalCount"`

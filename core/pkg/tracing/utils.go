@@ -3,7 +3,9 @@ package tracing
 import (
 	"context"
 	"github.com/labstack/echo/v4"
+	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
+	"github.com/segmentio/kafka-go"
 	"google.golang.org/grpc/metadata"
 )
 

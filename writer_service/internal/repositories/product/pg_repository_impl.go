@@ -1,12 +1,14 @@
-package product
+package repositories
 
 import (
 	"context"
+
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/minhwalker/cqrs-microservices/core/models"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
-	repository2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/repositories"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/models"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/repositories"
+	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 )
@@ -17,7 +19,7 @@ type productRepository struct {
 	db  *pgxpool.Pool
 }
 
-func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) repository2.IProductRepositoryWriter {
+func NewProductRepository(log logger.Logger, cfg *config.Config, db *pgxpool.Pool) repositories.IProductRepositoryWriter {
 	return &productRepository{log: log, cfg: cfg, db: db}
 }
 
@@ -26,7 +28,7 @@ func (p *productRepository) CreateProduct(ctx context.Context, product *models.P
 	defer span.Finish()
 
 	var created models.Product
-	if err := p.db.QueryRow(ctx, repository.createProductQuery, &product.ProductID, &product.Name, &product.Description, &product.Price).Scan(
+	if err := p.db.QueryRow(ctx, createProductQuery, &product.ProductID, &product.Name, &product.Description, &product.Price).Scan(
 		&created.ProductID,
 		&created.Name,
 		&created.Description,
@@ -47,7 +49,7 @@ func (p *productRepository) UpdateProduct(ctx context.Context, product *models.P
 	var prod models.Product
 	if err := p.db.QueryRow(
 		ctx,
-		repository.updateProductQuery,
+		updateProductQuery,
 		&product.Name,
 		&product.Description,
 		&product.Price,
@@ -64,7 +66,7 @@ func (p *productRepository) GetProductById(ctx context.Context, uuid uuid.UUID) 
 	defer span.Finish()
 
 	var product models.Product
-	if err := p.db.QueryRow(ctx, repository.getProductByIdQuery, uuid).Scan(
+	if err := p.db.QueryRow(ctx, getProductByIdQuery, uuid).Scan(
 		&product.ProductID,
 		&product.Name,
 		&product.Description,
@@ -82,7 +84,7 @@ func (p *productRepository) DeleteProduct(ctx context.Context, uuid uuid.UUID) e
 	span, ctx := opentracing.StartSpanFromContext(ctx, "productRepository.DeleteProductByID")
 	defer span.Finish()
 
-	_, err := p.db.Exec(ctx, repository.deleteProductByIdQuery, uuid)
+	_, err := p.db.Exec(ctx, deleteProductByIdQuery, uuid)
 	if err != nil {
 		return errors.Wrap(err, "Exec")
 	}
