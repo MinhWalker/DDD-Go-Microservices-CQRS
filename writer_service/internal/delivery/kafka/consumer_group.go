@@ -5,8 +5,8 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/usecase"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
-	usecase "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 	"github.com/segmentio/kafka-go"
 	"sync"
 )

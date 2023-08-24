@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/go-redis/redis/v8"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/interceptors"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
@@ -9,6 +10,8 @@ import (
 	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
 	redisClient "github.com/minhwalker/cqrs-microservices/core/pkg/redis"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
+	"github.com/opentracing/opentracing-go"
+	"github.com/segmentio/kafka-go"
 	"os"
 	"os/signal"
 	"syscall"
@@ -29,10 +32,10 @@ type server struct {
 	log         logger.Logger
 	cfg         *config.Config
 	v           *validator.Validate
-	kafkaConn   *kafkaClient.Conn
+	kafkaConn   *kafka.Conn
 	im          interceptors.InterceptorManager
 	mongoClient *mongo.Client
-	redisClient redisClient.UniversalClient
+	redisClient redis.UniversalClient
 	pgConn      *pgxpool.Pool
 	ps          *handler.ProductService
 	metrics     *metrics.ReaderServiceMetrics

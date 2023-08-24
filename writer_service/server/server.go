@@ -2,13 +2,10 @@ package server
 
 import (
 	"context"
-	usecase "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/go-playground/validator"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/interceptors"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
@@ -16,9 +13,13 @@ import (
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	kafkaConsumer "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/kafka"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/usecase"
 	product3 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/repositories/product"
+	usecase2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 
+	"github.com/go-playground/validator"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
@@ -58,7 +59,7 @@ func (s *server) Run() error {
 	defer kafkaProducer.Close() // nolint: errcheck
 
 	productRepo := product2.NewProductRepository(s.log, s.cfg, pgxConn)
-	s.ps = usecase.NewProductUsecase(s.log, s.cfg, productRepo, kafkaProducer)
+	s.ps = usecase2.NewProductUsecase(s.log, s.cfg, productRepo, kafkaProducer)
 	productMessageProcessor := kafkaConsumer.NewProductMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 
 	s.log.Info("Starting Writer Kafka consumers")
