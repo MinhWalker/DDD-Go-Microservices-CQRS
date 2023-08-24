@@ -37,35 +37,35 @@ func NewReaderServiceMetrics(cfg *config.Config) *ReaderServiceMetrics {
 		}),
 		CreateProductGrpcRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_create_product_grpc_requests_total", cfg.ServiceName),
-			Help: "The total number of create product_usecase grpc requests",
+			Help: "The total number of create product grpc requests",
 		}),
 		UpdateProductGrpcRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_update_product_grpc_requests_total", cfg.ServiceName),
-			Help: "The total number of update product_usecase grpc requests",
+			Help: "The total number of update product grpc requests",
 		}),
 		DeleteProductGrpcRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_delete_product_grpc_requests_total", cfg.ServiceName),
-			Help: "The total number of delete product_usecase grpc requests",
+			Help: "The total number of delete product grpc requests",
 		}),
 		GetProductByIdGrpcRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_get_product_by_id_grpc_requests_total", cfg.ServiceName),
-			Help: "The total number of get product_usecase by id grpc requests",
+			Help: "The total number of get product by id grpc requests",
 		}),
 		SearchProductGrpcRequests: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_search_product_grpc_requests_total", cfg.ServiceName),
-			Help: "The total number of search product_usecase grpc requests",
+			Help: "The total number of search product grpc requests",
 		}),
 		CreateProductKafkaMessages: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_create_product_kafka_messages_total", cfg.ServiceName),
-			Help: "The total number of create product_usecase kafka messages",
+			Help: "The total number of create product kafka messages",
 		}),
 		UpdateProductKafkaMessages: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_update_product_kafka_messages_total", cfg.ServiceName),
-			Help: "The total number of update product_usecase kafka messages",
+			Help: "The total number of update product kafka messages",
 		}),
 		DeleteProductKafkaMessages: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_delete_product_kafka_messages_total", cfg.ServiceName),
-			Help: "The total number of delete product_usecase kafka messages",
+			Help: "The total number of delete product kafka messages",
 		}),
 		SuccessKafkaMessages: promauto.NewCounter(prometheus.CounterOpts{
 			Name: fmt.Sprintf("%s_success_kafka_processed_messages_total", cfg.ServiceName),

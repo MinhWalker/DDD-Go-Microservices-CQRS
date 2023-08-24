@@ -22,7 +22,7 @@ const docTemplate = `{
     "paths": {
         "/products": {
             "post": {
-                "description": "Create new product_usecase item",
+                "description": "Create new product item",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,7 +32,7 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Create product_usecase",
+                "summary": "Create product",
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -45,7 +45,7 @@ const docTemplate = `{
         },
         "/products/search": {
             "get": {
-                "description": "Get product_usecase by name with pagination",
+                "description": "Get product by name with pagination",
                 "consumes": [
                     "application/json"
                 ],
@@ -55,7 +55,7 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Search product_usecase",
+                "summary": "Search product",
                 "parameters": [
                     {
                         "type": "string",
@@ -88,7 +88,7 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
-                "description": "Get product_usecase by id",
+                "description": "Get product by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -98,7 +98,7 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Get product_usecase",
+                "summary": "Get product",
                 "parameters": [
                     {
                         "type": "string",
@@ -118,7 +118,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update existing product_usecase",
+                "description": "Update existing product",
                 "consumes": [
                     "application/json"
                 ],
@@ -128,7 +128,7 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Update product_usecase",
+                "summary": "Update product",
                 "parameters": [
                     {
                         "type": "string",
@@ -148,7 +148,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete existing product_usecase",
+                "description": "Delete existing product",
                 "consumes": [
                     "application/json"
                 ],
@@ -158,7 +158,7 @@ const docTemplate = `{
                 "tags": [
                     "Products"
                 ],
-                "summary": "Delete product_usecase",
+                "summary": "Delete product",
                 "parameters": [
                     {
                         "type": "string",

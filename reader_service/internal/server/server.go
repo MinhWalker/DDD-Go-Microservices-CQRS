@@ -2,7 +2,10 @@ package server
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/minhwalker/cqrs-microservices/core/pkg/interceptors"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
@@ -10,21 +13,19 @@ import (
 	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
 	redisClient "github.com/minhwalker/cqrs-microservices/core/pkg/redis"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
-	"github.com/opentracing/opentracing-go"
-	"github.com/segmentio/kafka-go"
-	"os"
-	"os/signal"
-	"syscall"
-
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
 	readerKafka "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/kafka"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/domain/usecase"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
-	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repository/product"
+	product2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/repositories/product"
+	usecase2 "github.com/minhwalker/cqrs-microservices/reader_service/internal/usecase"
 
 	"github.com/go-playground/validator"
+	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
+	"github.com/segmentio/kafka-go"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -37,7 +38,7 @@ type server struct {
 	mongoClient *mongo.Client
 	redisClient redis.UniversalClient
 	pgConn      *pgxpool.Pool
-	ps          *handler.ProductService
+	ps          usecase.IProductUsecase
 	metrics     *metrics.ReaderServiceMetrics
 }
 
@@ -77,7 +78,7 @@ func (s *server) Run() error {
 	mongoRepo := product2.NewMongoRepository(s.log, s.cfg, s.mongoClient)
 	redisRepo := product2.NewRedisRepository(s.log, s.cfg, s.redisClient)
 
-	s.ps = handler.NewProductService(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
+	s.ps = usecase2.NewProductUsecase(s.log, s.cfg, mongoRepo, redisRepo, productRepo)
 
 	readerMessageProcessor := readerKafka.NewReaderMessageProcessor(s.log, s.cfg, s.v, s.ps, s.metrics)
 

@@ -7,7 +7,7 @@ import (
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	readerGrpc "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/grpc"
-	readerService "github.com/minhwalker/cqrs-microservices/reader_service/proto/product_reader"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/proto/product_reader"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

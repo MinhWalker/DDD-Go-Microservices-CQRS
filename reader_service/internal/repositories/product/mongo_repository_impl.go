@@ -1,11 +1,13 @@
-package repository
+package repositories
 
 import (
 	"context"
-	"github.com/minhwalker/cqrs-microservices/core/models"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/domain/models"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/domain/repositories"
+	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,7 +22,7 @@ type mongoRepository struct {
 	db  *mongo.Client
 }
 
-func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) RepositoryReader {
+func NewMongoRepository(log logger.Logger, cfg *config.Config, db *mongo.Client) repositories.IProductRepositoryReader {
 	return &mongoRepository{log: log, cfg: cfg, db: db}
 }
 

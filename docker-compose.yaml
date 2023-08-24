@@ -1,68 +1,68 @@
 version: "3.8"
 
 services:
-  api_gateway_service:
-    container_name: api_gateway_service
-    build:
-      context: .
-      dockerfile: docker/api_gateway.Dockerfile
-    ports:
-      - "5001:5001"
-      - "3001:3001"
-      - "8001:8001"
-    volumes:
-      - ./:/app
-    restart: always
-    environment:
-      - POSTGRES_HOST=host.docker.internal
-      - POSTGRES_PORT=5432
-      - REDIS_ADDR=host.docker.internal:6379
-      - MONGO_URI=mongodb://host.docker.internal:27017
-      - JAEGER_HOST=host.docker.internal:6831
-      - KAFKA_BROKERS=host.docker.internal:9092
-      - READER_SERVICE=reader_service:5003
-    depends_on:
-      - redis
-      - prometheus
-      - grafana
-      - jaeger
-      - reader_service
-      - writer_service
-      - zoo1
-      - kafka1
-    networks: [ "microservices" ]
+#  api_gateway_service:
+#    container_name: api_gateway_service
+#    build:
+#      context: .
+#      dockerfile: docker/api_gateway.Dockerfile
+#    ports:
+#      - "5001:5001"
+#      - "3001:3001"
+#      - "8001:8001"
+#    volumes:
+#      - ./:/app
+#    restart: always
+#    environment:
+#      - POSTGRES_HOST=host.docker.internal
+#      - POSTGRES_PORT=5432
+#      - REDIS_ADDR=host.docker.internal:6379
+#      - MONGO_URI=mongodb://host.docker.internal:27017
+#      - JAEGER_HOST=host.docker.internal:6831
+#      - KAFKA_BROKERS=host.docker.internal:9092
+#      - READER_SERVICE=reader_service:5003
+#    depends_on:
+#      - redis
+#      - prometheus
+#      - grafana
+#      - jaeger
+#      - reader_service
+#      - writer_service
+#      - zoo1
+#      - kafka1
+#    networks: [ "microservices" ]
 
-  reader_service:
-    container_name: reader_service
-    build:
-      context: .
-      dockerfile: docker/reader_service.Dockerfile
-    ports:
-      - "5003:5003"
-      - "3003:3003"
-      - "8003:8003"
-    volumes:
-      - ./:/app
-    restart: always
-    environment:
-      - POSTGRES_HOST=host.docker.internal
-      - POSTGRES_PORT=5434
-      - REDIS_ADDR=host.docker.internal:6379
-      - MONGO_URI=mongodb://host.docker.internal:27017
-      - JAEGER_HOST=host.docker.internal:6831
-      - KAFKA_BROKERS=host.docker.internal:9092
-    depends_on:
-      - redis
-      - prometheus
-      - grafana
-      - jaeger
-      - mongodb
-#      - microservices_postgesql
-      - master_db
-      - slave_db
-      - zoo1
-      - kafka1
-    networks: [ "microservices" ]
+#  reader_service:
+#    container_name: reader_service
+#    build:
+#      context: .
+#      dockerfile: docker/reader_service.Dockerfile
+#    ports:
+#      - "5003:5003"
+#      - "3003:3003"
+#      - "8003:8003"
+#    volumes:
+#      - ./:/app
+#    restart: always
+#    environment:
+#      - POSTGRES_HOST=host.docker.internal
+#      - POSTGRES_PORT=5434
+#      - REDIS_ADDR=host.docker.internal:6379
+#      - MONGO_URI=mongodb://host.docker.internal:27017
+#      - JAEGER_HOST=host.docker.internal:6831
+#      - KAFKA_BROKERS=host.docker.internal:9092
+#    depends_on:
+#      - redis
+#      - prometheus
+#      - grafana
+#      - jaeger
+#      - mongodb
+##      - microservices_postgesql
+#      - master_db
+#      - slave_db
+#      - zoo1
+#      - kafka1
+#    networks: [ "microservices" ]
 
   writer_service:
     container_name: writer_service

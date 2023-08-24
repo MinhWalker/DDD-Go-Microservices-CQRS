@@ -3,15 +3,15 @@ package grpc
 import (
 	"context"
 	"github.com/go-playground/validator"
-	"github.com/minhwalker/cqrs-microservices/core/models"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	dto "github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/product"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/handler"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/domain/models"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/domain/usecase"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/dto"
+	"github.com/minhwalker/cqrs-microservices/reader_service/internal/dto/proto/product_reader"
 	"github.com/minhwalker/cqrs-microservices/reader_service/internal/metrics"
-	"github.com/minhwalker/cqrs-microservices/reader_service/proto/product_reader"
 	uuid "github.com/satori/go.uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -22,11 +22,11 @@ type grpcService struct {
 	log     logger.Logger
 	cfg     *config.Config
 	v       *validator.Validate
-	ps      *handler.ProductService
+	ps      usecase.IProductUsecase
 	metrics *metrics.ReaderServiceMetrics
 }
 
-func NewReaderGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps *handler.ProductService, metrics *metrics.ReaderServiceMetrics) *grpcService {
+func NewReaderGrpcService(log logger.Logger, cfg *config.Config, v *validator.Validate, ps usecase.IProductUsecase, metrics *metrics.ReaderServiceMetrics) *grpcService {
 	return &grpcService{log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 
@@ -42,7 +42,7 @@ func (s *grpcService) CreateProduct(ctx context.Context, req *readerService.Crea
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	if err := s.ps.Commands.CreateProduct.Handle(ctx, command); err != nil {
+	if err := s.ps.Create(ctx, command); err != nil {
 		s.log.WarnMsg("CreateProduct.Handle", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
@@ -63,7 +63,7 @@ func (s *grpcService) UpdateProduct(ctx context.Context, req *readerService.Upda
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	if err := s.ps.Commands.UpdateProduct.Handle(ctx, command); err != nil {
+	if err := s.ps.Update(ctx, command); err != nil {
 		s.log.WarnMsg("UpdateProduct.Handle", err)
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
@@ -90,7 +90,7 @@ func (s *grpcService) GetProductById(ctx context.Context, req *readerService.Get
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	product, err := s.ps.Queries.GetProductById.Handle(ctx, query)
+	product, err := s.ps.GetProductById(ctx, query)
 	if err != nil {
 		s.log.WarnMsg("GetProductById.Handle", err)
 		return nil, s.errResponse(codes.Internal, err)
@@ -109,7 +109,7 @@ func (s *grpcService) SearchProduct(ctx context.Context, req *readerService.Sear
 	pq := utils.NewPaginationQuery(int(req.GetSize()), int(req.GetPage()))
 
 	query := dto.NewSearchProductQuery(req.GetSearch(), pq)
-	productsList, err := s.ps.Queries.SearchProduct.Handle(ctx, query)
+	productsList, err := s.ps.Search(ctx, query)
 	if err != nil {
 		s.log.WarnMsg("SearchProduct.Handle", err)
 		return nil, s.errResponse(codes.Internal, err)
@@ -131,7 +131,7 @@ func (s *grpcService) DeleteProductByID(ctx context.Context, req *readerService.
 		return nil, s.errResponse(codes.InvalidArgument, err)
 	}
 
-	if err := s.ps.Commands.DeleteProduct.Handle(ctx, dto.NewDeleteProductCommand(productUUID)); err != nil {
+	if err := s.ps.Delete(ctx, dto.NewDeleteProductCommand(productUUID)); err != nil {
 		s.log.WarnMsg("DeleteProduct.Handle", err)
 		return nil, s.errResponse(codes.Internal, err)
 	}

@@ -13,7 +13,7 @@ import (
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion7
 
-// WriterServiceClient is the client API for WriterService product_usecase.
+// WriterServiceClient is the client API for WriterService product.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WriterServiceClient interface {
@@ -57,7 +57,7 @@ func (c *writerServiceClient) GetProductById(ctx context.Context, in *GetProduct
 	return out, nil
 }
 
-// WriterServiceServer is the server API for WriterService product_usecase.
+// WriterServiceServer is the server API for WriterService product.
 // All implementations should embed UnimplementedWriterServiceServer
 // for forward compatibility
 type WriterServiceServer interface {
@@ -80,7 +80,7 @@ func (UnimplementedWriterServiceServer) GetProductById(context.Context, *GetProd
 	return nil, status.Errorf(codes.Unimplemented, "method GetProductById not implemented")
 }
 
-// UnsafeWriterServiceServer may be embedded to opt out of forward compatibility for this product_usecase.
+// UnsafeWriterServiceServer may be embedded to opt out of forward compatibility for this product.
 // Use of this interface is not recommended, as added methods to WriterServiceServer will
 // result in compilation errors.
 type UnsafeWriterServiceServer interface {
