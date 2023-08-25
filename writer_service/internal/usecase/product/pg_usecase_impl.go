@@ -2,20 +2,19 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/minhwalker/cqrs-microservices/core/models"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
-	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/utils"
 	kafkaMessages "github.com/minhwalker/cqrs-microservices/core/proto/kafka"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
 	models2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/models"
 	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/repositories"
 	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/usecase"
 	"github.com/minhwalker/cqrs-microservices/writer_service/internal/mappers"
+
 	"github.com/opentracing/opentracing-go"
-	"github.com/segmentio/kafka-go"
-	"google.golang.org/protobuf/proto"
-	"time"
 )
 
 type productUsecase struct {
@@ -46,19 +45,8 @@ func (u *productUsecase) Create(ctx context.Context, command *models2.CreateProd
 	}
 
 	msg := &kafkaMessages.ProductCreated{Product: mappers.ProductToGrpcMessage(product)}
-	msgBytes, err := proto.Marshal(msg)
-	if err != nil {
-		return err
-	}
 
-	message := kafka.Message{
-		Topic:   u.cfg.KafkaTopics.ProductCreated.TopicName,
-		Value:   msgBytes,
-		Time:    time.Now().UTC(),
-		Headers: tracing.GetKafkaTracingHeadersFromSpanCtx(span.Context()),
-	}
-
-	return u.kafkaProducer.PublishMessage(ctx, message)
+	return utils.PublishKafkaMessage(ctx, span.Context(), u.kafkaProducer, msg, u.cfg.KafkaTopics.ProductCreated.TopicName)
 }
 
 func (u *productUsecase) Delete(ctx context.Context, command *models2.DeleteProductCommand) error {
@@ -70,19 +58,8 @@ func (u *productUsecase) Delete(ctx context.Context, command *models2.DeleteProd
 	}
 
 	msg := &kafkaMessages.ProductDeleted{ProductID: command.ProductID.String()}
-	msgBytes, err := proto.Marshal(msg)
-	if err != nil {
-		return err
-	}
 
-	message := kafka.Message{
-		Topic:   u.cfg.KafkaTopics.ProductDeleted.TopicName,
-		Value:   msgBytes,
-		Time:    time.Now().UTC(),
-		Headers: tracing.GetKafkaTracingHeadersFromSpanCtx(span.Context()),
-	}
-
-	return u.kafkaProducer.PublishMessage(ctx, message)
+	return utils.PublishKafkaMessage(ctx, span.Context(), u.kafkaProducer, msg, u.cfg.KafkaTopics.ProductDeleted.TopicName)
 }
 
 func (u *productUsecase) Update(ctx context.Context, command *models2.UpdateProductCommand) error {
@@ -102,19 +79,8 @@ func (u *productUsecase) Update(ctx context.Context, command *models2.UpdateProd
 	}
 
 	msg := &kafkaMessages.ProductUpdated{Product: mappers.ProductToGrpcMessage(product)}
-	msgBytes, err := proto.Marshal(msg)
-	if err != nil {
-		return err
-	}
 
-	message := kafka.Message{
-		Topic:   u.cfg.KafkaTopics.ProductUpdated.TopicName,
-		Value:   msgBytes,
-		Time:    time.Now().UTC(),
-		Headers: tracing.GetKafkaTracingHeadersFromSpanCtx(span.Context()),
-	}
-
-	return u.kafkaProducer.PublishMessage(ctx, message)
+	return utils.PublishKafkaMessage(ctx, span.Context(), u.kafkaProducer, msg, u.cfg.KafkaTopics.ProductUpdated.TopicName)
 }
 
 func (u *productUsecase) GetByID(ctx context.Context, query *models2.GetProductByIdQuery) (*models2.Product, error) {
