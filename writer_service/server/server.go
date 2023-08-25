@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/valyala/fasthttp"
 	"os"
 	"os/signal"
 	"syscall"
@@ -28,6 +27,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
+	"github.com/valyala/fasthttp"
 )
 
 type server struct {

@@ -6,9 +6,8 @@ import (
 
 func (h *httpService) MapRoutes() {
 	path := "/api/v1/products"
-	h.routes.POST(path+"", h.CreateProduct())
-	h.routes.PUT(path+"/:id", h.UpdateProduct())
-	h.routes.DELETE(path+"/:id", h.DeleteProduct())
+	h.routes.GET(path+"/search", h.SearchProduct())
+	h.routes.GET(path+"/get/:id", h.GetProductByID())
 	h.routes.OPTIONS(path+"/health", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		ctx.WriteString("OK")

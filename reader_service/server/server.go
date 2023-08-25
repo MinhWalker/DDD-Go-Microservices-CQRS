@@ -2,6 +2,10 @@ package server
 
 import (
 	"context"
+	"fmt"
+	"github.com/buaazp/fasthttprouter"
+	v1 "github.com/minhwalker/cqrs-microservices/reader_service/internal/delivery/http/v1"
+	"github.com/valyala/fasthttp"
 	"os"
 	"os/signal"
 	"syscall"
@@ -90,6 +94,19 @@ func (s *server) Run() error {
 		return errors.Wrap(err, "s.connectKafkaBrokers")
 	}
 	defer s.kafkaConn.Close() // nolint: errcheck
+
+	router := fasthttprouter.New()
+
+	productHandlers := v1.NewReaderHttpService(router, s.log, s.cfg, s.v, s.ps, s.metrics)
+	productHandlers.MapRoutes()
+
+	port := s.cfg.Http.Port
+	addr := fmt.Sprintf("%s", port)
+
+	fmt.Printf("Server is listening on %s\n", addr)
+	if err := fasthttp.ListenAndServe(addr, router.Handler); err != nil {
+		s.log.Fatalf("Error starting server: %s", err)
+	}
 
 	s.runHealthCheck(ctx)
 	s.runMetrics(cancel)

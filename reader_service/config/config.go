@@ -27,6 +27,7 @@ type Config struct {
 	Logger           *logger.Config      `mapstructure:"logger"`
 	KafkaTopics      KafkaTopics         `mapstructure:"kafkaTopics"`
 	GRPC             GRPC                `mapstructure:"grpc"`
+	Http             Http                `mapstructure:"http"`
 	Postgresql       *postgres.Config    `mapstructure:"postgres"`
 	Kafka            *kafkaClient.Config `mapstructure:"kafka"`
 	Mongo            *mongodb.Config     `mapstructure:"mongo"`
@@ -35,6 +36,17 @@ type Config struct {
 	Probes           probes.Config       `mapstructure:"probes"`
 	ServiceSettings  ServiceSettings     `mapstructure:"serviceSettings"`
 	Jaeger           *tracing.Config     `mapstructure:"jaeger"`
+}
+
+type Http struct {
+	Port                string   `mapstructure:"port"`
+	Development         bool     `mapstructure:"development"`
+	BasePath            string   `mapstructure:"basePath"`
+	ProductsPath        string   `mapstructure:"productsPath"`
+	DebugHeaders        bool     `mapstructure:"debugHeaders"`
+	HttpClientDebug     bool     `mapstructure:"httpClientDebug"`
+	DebugErrorsResponse bool     `mapstructure:"debugErrorsResponse"`
+	IgnoreLogUrls       []string `mapstructure:"ignoreLogUrls"`
 }
 
 type GRPC struct {

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
 	"github.com/minhwalker/cqrs-microservices/reader_service/config"
-	"github.com/minhwalker/cqrs-microservices/reader_service/internal/server"
+	"github.com/minhwalker/cqrs-microservices/reader_service/server"
 	"log"
 )
 

@@ -33,6 +33,14 @@ func NewWriterHttpService(routes *fasthttprouter.Router, log logger.Logger, cfg 
 	return &httpService{routes: routes, log: log, cfg: cfg, v: v, ps: ps, metrics: metrics}
 }
 
+// CreateProduct
+// @Tags Products
+// @Summary Create product
+// @Description Create new product item
+// @Accept json
+// @Produce json
+// @Success 201 {object} dto.CreateProductResponseDto
+// @Router /products [post]
 func (h *httpService) CreateProduct() fasthttp.RequestHandler {
 	return func(ctx *fasthttp.RequestCtx) {
 		h.metrics.CreateProductHttpRequests.Inc()
@@ -72,6 +80,15 @@ func (h *httpService) CreateProduct() fasthttp.RequestHandler {
 	}
 }
 
+// UpdateProduct
+// @Tags Products
+// @Summary Update product
+// @Description Update existing product
+// @Accept json
+// @Produce json
+// @Param id path string true "Product ID"
+// @Success 200 {object} dto.UpdateProductDto
+// @Router /products/{id} [put]
 func (h *httpService) UpdateProduct() fasthttp.RequestHandler {
 	return func(ctx *fasthttp.RequestCtx) {
 		h.metrics.UpdateProductHttpRequests.Inc()
@@ -118,6 +135,15 @@ func (h *httpService) UpdateProduct() fasthttp.RequestHandler {
 	}
 }
 
+// DeleteProduct
+// @Tags Products
+// @Summary Delete product
+// @Description Delete existing product
+// @Accept json
+// @Produce json
+// @Success 200 ""
+// @Param id path string true "Product ID"
+// @Router /products/{id} [delete]
 func (h *httpService) DeleteProduct() fasthttp.RequestHandler {
 	return func(ctx *fasthttp.RequestCtx) {
 		h.metrics.DeleteProductHttpRequests.Inc()
