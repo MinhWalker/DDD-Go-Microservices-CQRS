@@ -2,14 +2,15 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"github.com/heptiolabs/healthcheck"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/constants"
 	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/segmentio/kafka-go"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"net"
 	"net/http"
 	"strconv"
@@ -144,18 +145,28 @@ func (s *server) runHealthCheck(ctx context.Context) {
 }
 
 func (s *server) runMetrics(cancel context.CancelFunc) {
-	metricsServer := echo.New()
+	metricsServer := &fasthttp.Server{
+		Handler: s.metricsHandler,
+	}
+
 	go func() {
-		metricsServer.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
-			StackSize:         stackSize,
-			DisablePrintStack: true,
-			DisableStackAll:   true,
-		}))
-		metricsServer.GET(s.cfg.Probes.PrometheusPath, echo.WrapHandler(promhttp.Handler()))
-		s.log.Infof("Metrics server is running on port: %s", s.cfg.Probes.PrometheusPort)
-		if err := metricsServer.Start(s.cfg.Probes.PrometheusPort); err != nil {
-			s.log.Errorf("metricsServer.Start: %v", err)
+		addr := fmt.Sprintf(":%s", s.cfg.Probes.PrometheusPort)
+		if err := metricsServer.ListenAndServe(addr); err != nil {
+			s.log.Printf("metricsServer.ListenAndServe: %v", err)
 			cancel()
 		}
 	}()
+
+	s.log.Printf("Metrics server is running on port: %s", s.cfg.Probes.PrometheusPort)
+}
+
+func (s *server) metricsHandler(ctx *fasthttp.RequestCtx) {
+	// Your middleware/recovery logic here
+	// Note: FastHTTP doesn't have a built-in middleware system like Echo
+	// You need to implement the middleware logic manually if needed
+
+	// Serve Prometheus metrics using the fasthttpadaptor and promhttp packages
+	if string(ctx.Path()) == s.cfg.Probes.PrometheusPath {
+		fasthttpadaptor.NewFastHTTPHandler(promhttp.Handler())
+	}
 }

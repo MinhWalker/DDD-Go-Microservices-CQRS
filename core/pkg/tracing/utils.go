@@ -2,25 +2,44 @@ package tracing
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/segmentio/kafka-go"
+	"github.com/valyala/fasthttp"
 	"google.golang.org/grpc/metadata"
 )
 
-func StartHttpServerTracerSpan(c echo.Context, operationName string) (context.Context, opentracing.Span) {
-	spanCtx, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(c.Request().Header))
+type FastHTTPRequestCarrier struct {
+	ctx *fasthttp.RequestCtx
+}
+
+func (c *FastHTTPRequestCarrier) Set(key, val string) {
+	c.ctx.Request.Header.Set(key, val)
+}
+
+func (c *FastHTTPRequestCarrier) ForeachKey(handler func(key, val string) error) error {
+	c.ctx.Request.Header.VisitAll(func(k, v []byte) {
+		if err := handler(string(k), string(v)); err != nil {
+			// Handle error if needed
+		}
+	})
+	return nil
+}
+
+func StartHttpServerTracerSpan(ctx *fasthttp.RequestCtx, operationName string) (context.Context, opentracing.Span) {
+	carrier := &FastHTTPRequestCarrier{ctx: ctx}
+
+	spanCtx, err := opentracing.GlobalTracer().Extract(opentracing.TextMap, carrier)
 	if err != nil {
 		serverSpan := opentracing.GlobalTracer().StartSpan(operationName)
-		ctx := opentracing.ContextWithSpan(c.Request().Context(), serverSpan)
-		return ctx, serverSpan
+		ctxWithSpan := opentracing.ContextWithSpan(ctx, serverSpan)
+		return ctxWithSpan, serverSpan
 	}
 
 	serverSpan := opentracing.GlobalTracer().StartSpan(operationName, ext.RPCServerOption(spanCtx))
-	ctx := opentracing.ContextWithSpan(c.Request().Context(), serverSpan)
+	ctxWithSpan := opentracing.ContextWithSpan(ctx, serverSpan)
 
-	return ctx, serverSpan
+	return ctxWithSpan, serverSpan
 }
 
 func GetTextMapCarrierFromMetaData(ctx context.Context) opentracing.TextMapCarrier {

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/valyala/fasthttp"
 	"net/http"
 	"strings"
 	"time"
@@ -234,7 +235,14 @@ func ErrorResponse(err error, debug bool) (int, interface{}) {
 }
 
 // ErrorCtxResponse Error response object and status code
-func ErrorCtxResponse(ctx echo.Context, err error, debug bool) error {
-	restErr := ParseErrors(err, debug)
-	return ctx.JSON(restErr.Status(), restErr)
+func ErrorCtxResponse(ctx *fasthttp.RequestCtx, err error, debug bool) error {
+	restErr := ParseErrors(err, debug) // Assuming ParseErrors is a function that converts an error to a rest error
+	ctx.SetStatusCode(restErr.Status())
+	ctx.SetContentType("application/json")
+
+	// Convert restErr to JSON
+	jsonData, _ := json.Marshal(restErr)
+	ctx.SetBody(jsonData)
+
+	return err // Return the original error
 }

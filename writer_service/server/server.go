@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"fmt"
+	"github.com/valyala/fasthttp"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,12 +14,15 @@ import (
 	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
 	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"github.com/minhwalker/cqrs-microservices/writer_service/config"
+	v1 "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/http/v1"
 	kafkaConsumer "github.com/minhwalker/cqrs-microservices/writer_service/internal/delivery/kafka"
 	"github.com/minhwalker/cqrs-microservices/writer_service/internal/domain/usecase"
 	product3 "github.com/minhwalker/cqrs-microservices/writer_service/internal/metrics"
+	"github.com/minhwalker/cqrs-microservices/writer_service/internal/middlewares"
 	product2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/repositories/product"
 	usecase2 "github.com/minhwalker/cqrs-microservices/writer_service/internal/usecase/product"
 
+	"github.com/buaazp/fasthttprouter"
 	"github.com/go-playground/validator"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/opentracing/opentracing-go"
@@ -32,6 +37,7 @@ type server struct {
 	kafkaConn *kafka.Conn
 	ps        usecase.IProductUsecase
 	im        interceptors.InterceptorManager
+	mw        middlewares.MiddlewareManager
 	pgConn    *pgxpool.Pool
 	metrics   *product3.WriterServiceMetrics
 }
@@ -76,6 +82,19 @@ func (s *server) Run() error {
 		return errors.Wrap(err, "s.connectKafkaBrokers")
 	}
 	defer s.kafkaConn.Close() // nolint: errcheck
+
+	router := fasthttprouter.New()
+
+	productHandlers := v1.NewWriterHttpService(router, s.log, s.cfg, s.v, s.ps, s.metrics)
+	productHandlers.MapRoutes()
+
+	port := s.cfg.Http.Port
+	addr := fmt.Sprintf("%s", port)
+
+	fmt.Printf("Server is listening on %s\n", addr)
+	if err := fasthttp.ListenAndServe(addr, router.Handler); err != nil {
+		s.log.Fatalf("Error starting server: %s", err)
+	}
 
 	if s.cfg.Kafka.InitTopics {
 		s.initKafkaTopics(ctx)
