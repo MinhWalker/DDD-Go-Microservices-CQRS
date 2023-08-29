@@ -12,7 +12,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "Alexander Bryksin",
-            "url": "https://github.com/AleksK1NG",
+            "url": "https://github.com/minhwalker",
             "email": "alexander.bryksin@yandex.ru"
         },
         "version": "{{.Version}}"
@@ -280,8 +280,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
+	//LeftDelim:        "{{",
+	//RightDelim:       "}}",
 }
 
 func init() {

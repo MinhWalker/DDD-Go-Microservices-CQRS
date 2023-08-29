@@ -2,6 +2,15 @@ serviceName: reader_service
 grpc:
   port: :5003
   development: true
+http:
+  port: :9003
+  development: true
+  basePath: /api/v1
+  productsPath: /api/v1/products
+  debugHeaders: false
+  httpClientDebug: false
+  debugErrorsResponse: true
+  ignoreLogUrls: [ "metrics" ]
 probes:
   readinessPath: /ready
   livenessPath: /live

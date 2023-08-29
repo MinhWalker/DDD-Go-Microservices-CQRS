@@ -3,14 +3,14 @@ package config
 import (
 	"flag"
 	"fmt"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/constants"
-	kafkaClient "github.com/AleksK1NG/cqrs-microservices/pkg/kafka"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/logger"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/mongodb"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/postgres"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/probes"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/redis"
-	"github.com/AleksK1NG/cqrs-microservices/pkg/tracing"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/constants"
+	kafkaClient "github.com/minhwalker/cqrs-microservices/core/pkg/kafka"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/logger"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/mongodb"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/postgres"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/probes"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/redis"
+	"github.com/minhwalker/cqrs-microservices/core/pkg/tracing"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"os"
@@ -27,6 +27,7 @@ type Config struct {
 	Logger           *logger.Config      `mapstructure:"logger"`
 	KafkaTopics      KafkaTopics         `mapstructure:"kafkaTopics"`
 	GRPC             GRPC                `mapstructure:"grpc"`
+	Http             Http                `mapstructure:"http"`
 	Postgresql       *postgres.Config    `mapstructure:"postgres"`
 	Kafka            *kafkaClient.Config `mapstructure:"kafka"`
 	Mongo            *mongodb.Config     `mapstructure:"mongo"`
@@ -35,6 +36,17 @@ type Config struct {
 	Probes           probes.Config       `mapstructure:"probes"`
 	ServiceSettings  ServiceSettings     `mapstructure:"serviceSettings"`
 	Jaeger           *tracing.Config     `mapstructure:"jaeger"`
+}
+
+type Http struct {
+	Port                string   `mapstructure:"port"`
+	Development         bool     `mapstructure:"development"`
+	BasePath            string   `mapstructure:"basePath"`
+	ProductsPath        string   `mapstructure:"productsPath"`
+	DebugHeaders        bool     `mapstructure:"debugHeaders"`
+	HttpClientDebug     bool     `mapstructure:"httpClientDebug"`
+	DebugErrorsResponse bool     `mapstructure:"debugErrorsResponse"`
+	IgnoreLogUrls       []string `mapstructure:"ignoreLogUrls"`
 }
 
 type GRPC struct {

@@ -2,6 +2,15 @@ serviceName: writer_service
 grpc:
   port: :5002
   development: true
+http:
+  port: :9002
+  development: true
+  basePath: /api/v1
+  productsPath: /api/v1/products
+  debugHeaders: false
+  httpClientDebug: false
+  debugErrorsResponse: true
+  ignoreLogUrls: [ "metrics" ]
 probes:
   readinessPath: /ready
   livenessPath: /live

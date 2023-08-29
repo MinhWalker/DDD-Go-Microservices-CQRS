@@ -42,9 +42,6 @@ curl -L https://releases.conduktor.io/quick-start -o docker-compose.yml
 
 Add new cluster host by value of KAFKA_ADVERTISED_LISTENERS on docker-compose file to connect
 
-
-
-
 #### Follow step to serve on local
 
 ```
@@ -70,160 +67,138 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
 
 ### Overview
 
-![CQRS_diagram.svg](resource%2FCQRS_diagram.svg)
+#### System diagram
 
-### Project structure
+![CQRS_diagram.svg](docs%2Fresource%2FCQRS_diagram.svg)
+
+#### Project structure
+
+![CleanArchitecture.jpg](docs%2Fresource%2FCleanArchitecture.jpg)
+
+#### Project structure folder tree
 ```
 .
 ├── Makefile
 ├── README.md
-├── api_gateway_service
+├── core
 │   ├── cmd
 │   │   └── main.go
-│   ├── config                            
+│   ├── config
 │   │   ├── config.go
 │   │   └── config.yaml
-│   └── internal
-│       ├── client
-│       │   └── reader_service.go
-│       ├── dto
-│       │   ├── create_product.go
-│       │   ├── product_list_response.go
-│       │   ├── product_response.go
-│       │   └── update_product.go
-│       ├── metrics
-│       │   └── metrics.go
-│       ├── middlewares
-│       │   └── middlewares.go
-│       ├── products
-│       │   ├── commands
-│       │   │   ├── commands.go
-│       │   │   ├── create_product.go
-│       │   │   ├── delete_product.go
-│       │   │   └── update_product.go
-│       │   ├── delivery
-│       │   │   └── http
-│       │   │       └── v1
-│       │   │           ├── handlers.go
-│       │   │           └── routes.go
-│       │   ├── delivery.go
-│       │   ├── queries
-│       │   │   ├── get_by_id.go
-│       │   │   ├── queries.go
-│       │   │   └── search_product.go
-│       │   └── service
-│       │       └── service.go
-│       └── server
-│           ├── http.go
-│           ├── server.go
-│           └── utils.go
-├── diagram
-│   └── system_diagram.svg
+│   ├── migrations
+│   │   ├── 01_microservices_tables_init.down.sql
+│   │   ├── 01_microservices_tables_init.up.sql
+│   │   └── mongo
+│   │       └── init.js
+│   ├── models
+│   │   └── product.go
+│   ├── monitoring
+│   │   ├── prometheus.yml
+│   │   └── prometheus_docker.yml
+│   ├── pkg
+│   │   ├── constants
+│   │   │   └── constants.go
+│   │   ├── http_client
+│   │   │   └── http_client.go
+│   │   ├── http_errors
+│   │   │   └── http_errors.go
+│   │   ├── http_utils
+│   │   │   └── http_utils.go
+│   │   ├── interceptors
+│   │   │   └── manager.go
+│   │   ├── kafka
+│   │   │   ├── client.go
+│   │   │   ├── config.go
+│   │   │   ├── constants.go
+│   │   │   ├── consumer_group.go
+│   │   │   ├── producer.go
+│   │   │   ├── reader.go
+│   │   │   └── writer.go
+│   │   ├── logger
+│   │   │   └── logger.go
+│   │   ├── mongodb
+│   │   │   └── mongodb.go
+│   │   ├── postgres
+│   │   │   └── postgres.go
+│   │   ├── probes
+│   │   │   └── probes.go
+│   │   ├── redis
+│   │   │   └── redis.go
+│   │   ├── tracing
+│   │   │   ├── jaeger.go
+│   │   │   └── utils.go
+│   │   └── utils
+│   │       └── pagination.go
+│   └── proto
+│       └── kafka
+│           ├── kafka.pb.go
+│           └── kafka.proto
 ├── docker
-│   ├── api_gateway.Dockerfile
 │   ├── reader_service.Dockerfile
 │   └── writer_service.Dockerfile
 ├── docker-compose.local.yaml
 ├── docker-compose.yaml
 ├── docs
 │   ├── docs.go
+│   ├── resource
+│   │   ├── CQRS_diagram.svg
+│   │   └── DDD_go.postman_collection.json
 │   ├── swagger.json
 │   └── swagger.yaml
 ├── go.mod
 ├── go.sum
-├── migrations
-│   ├── 01_microservices_tables_init.down.sql
-│   └── 01_microservices_tables_init.up.sql
+├── main
 ├── monitoring
 │   ├── prometheus.yml
 │   └── prometheus_docker.yml
-├── pkg
-│   ├── constants
-│   │   └── constants.go
-│   ├── http_client
-│   │   └── http_client.go
-│   ├── http_errors
-│   │   └── http_errors.go
-│   ├── http_utils
-│   │   └── http_utils.go
-│   ├── interceptors
-│   │   └── manager.go
-│   ├── kafka
-│   │   ├── client.go
-│   │   ├── config.go
-│   │   ├── constants.go
-│   │   ├── consumer_group.go
-│   │   ├── producer.go
-│   │   ├── reader.go
-│   │   └── writer.go
-│   ├── logger
-│   │   └── logger.go
-│   ├── mongodb
-│   │   └── mongodb.go
-│   ├── postgres
-│   │   └── postgres.go
-│   ├── probes
-│   │   └── probes.go
-│   ├── redis
-│   │   └── redis.go
-│   ├── tracing
-│   │   ├── jaeger.go
-│   │   └── utils.go
-│   └── utils
-│       └── pagination.go
-├── proto
-│   └── kafka
-│       ├── kafka.pb.go
-│       └── kafka.proto
 ├── reader_service
 │   ├── cmd
 │   │   └── main.go
 │   ├── config
 │   │   ├── config.go
 │   │   └── config.yaml
-│   ├── internal
-│   │   ├── metrics
-│   │   │   └── metrics.go
-│   │   ├── models
-│   │   │   └── product.go
-│   │   ├── product
-│   │   │   ├── commands
-│   │   │   │   ├── commands.go
-│   │   │   │   ├── create_product.go
-│   │   │   │   ├── delete_product.go
-│   │   │   │   └── update_product.go
-│   │   │   ├── delivery
-│   │   │   │   ├── grpc
-│   │   │   │   │   └── grpc_service.go
-│   │   │   │   └── kafka
-│   │   │   │       ├── consumer_group.go
-│   │   │   │       ├── create_product_consumer.go
-│   │   │   │       ├── delete_product_consumer.go
-│   │   │   │       ├── update_product_consumer.go
-│   │   │   │       └── utils.go
-│   │   │   ├── queries
-│   │   │   │   ├── get_by_id.go
-│   │   │   │   ├── queries.go
-│   │   │   │   └── search.go
-│   │   │   ├── repository
-│   │   │   │   ├── mongo_repository.go
-│   │   │   │   ├── redis_repository.go
-│   │   │   │   └── repository.go
-│   │   │   └── service
-│   │   │       └── service.go
-│   │   └── server
-│   │       ├── grpc_server.go
-│   │       ├── server.go
-│   │       └── utils.go
-│   └── proto
-│       └── product_reader
-│           ├── product_reader.pb.go
-│           ├── product_reader.proto
-│           ├── product_reader_grpc.pb.go
-│           ├── product_reader_messages.pb.go
-│           └── product_reader_messages.proto
-├── scripts
-│   └── init.js
+│   └── internal
+│       ├── delivery
+│       │   ├── grpc
+│       │   │   └── grpc_service_product.go
+│       │   └── kafka
+│       │       ├── consumer_group.go
+│       │       ├── create_product_consumer.go
+│       │       ├── delete_product_consumer.go
+│       │       ├── update_product_consumer.go
+│       │       └── utils.go
+│       ├── domain
+│       │   ├── models
+│       │   │   └── product.go
+│       │   ├── repositories
+│       │   │   └── product.go
+│       │   └── usecase
+│       │       └── product.go
+│       ├── dto
+│       │   ├── product.go
+│       │   └── proto
+│       │       └── product_reader
+│       │           ├── product_reader.pb.go
+│       │           ├── product_reader.proto
+│       │           ├── product_reader_grpc.pb.go
+│       │           ├── product_reader_messages.pb.go
+│       │           └── product_reader_messages.proto
+│       ├── metrics
+│       │   └── product_metrics.go
+│       ├── repositories
+│       │   └── product
+│       │       ├── mongo_repository_impl.go
+│       │       ├── pg_repository_impl.go
+│       │       ├── redis_repository_impl.go
+│       │       └── sql_queries.go
+│       ├── server
+│       │   ├── grpc_server.go
+│       │   ├── server.go
+│       │   └── utils.go
+│       └── usecase
+│           ├── pg_usecase_impl.go
+│           └── product
 └── writer_service
     ├── cmd
     │   └── main.go
@@ -231,47 +206,51 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
     │   ├── config.go
     │   └── config.yaml
     ├── internal
+    │   ├── delivery
+    │   │   ├── grpc
+    │   │   │   └── grpc_service_product.go
+    │   │   └── kafka
+    │   │       ├── consumer_group.go
+    │   │       ├── create_product_consumer.go
+    │   │       ├── delete_product_consumer.go
+    │   │       ├── update_product_consumer.go
+    │   │       └── utils.go
+    │   ├── domain
+    │   │   ├── models
+    │   │   │   └── product.go
+    │   │   ├── repositories
+    │   │   │   └── product.go
+    │   │   └── usecase
+    │   │       └── product.go
+    │   ├── dto
+    │   │   ├── product.go
+    │   │   └── proto
+    │   │       └── product_writer
+    │   │           ├── product_writer.pb.go
+    │   │           ├── product_writer.proto
+    │   │           ├── product_writer_grpc.pb.go
+    │   │           ├── product_writer_messages.pb.go
+    │   │           └── product_writer_messages.proto
+    │   ├── mappers
+    │   │   └── product_mapper.go
     │   ├── metrics
-    │   │   └── metrics.go
-    │   ├── models
-    │   │   └── product.go
-    │   ├── product
-    │   │   ├── commands
-    │   │   │   ├── commands.go
-    │   │   │   ├── create_product.go
-    │   │   │   ├── delete_product.go
-    │   │   │   └── update_product.go
-    │   │   ├── delivery
-    │   │   │   ├── grpc
-    │   │   │   │   └── grpc_service.go
-    │   │   │   └── kafka
-    │   │   │       ├── consumer_group.go
-    │   │   │       ├── create_product_consumer.go
-    │   │   │       ├── delete_product_consumer.go
-    │   │   │       ├── update_product_consumer.go
-    │   │   │       └── utils.go
-    │   │   ├── queries
-    │   │   │   ├── get_product_by_id.go
-    │   │   │   └── queries.go
-    │   │   ├── repository
-    │   │   │   ├── pg_repository.go
-    │   │   │   ├── repository.go
-    │   │   │   └── sql_queries.go
-    │   │   └── service
-    │   │       └── service.go
-    │   └── server
-    │       ├── grpc_server.go
-    │       ├── server.go
-    │       └── utils.go
-    ├── mappers
-    │   └── product_mapper.go
-    └── proto
-        └── product_writer
-            ├── product_writer.pb.go
-            ├── product_writer.proto
-            ├── product_writer_grpc.pb.go
-            ├── product_writer_messages.pb.go
-            └── product_writer_messages.proto
+    │   │   └── product_metrics.go
+    │   ├── middlewares
+    │   │   ├── cors.go
+    │   │   ├── middlewares.go
+    │   │   └── recover.go
+    │   ├── repositories
+    │   │   └── product
+    │   │       ├── pg_repository_impl.go
+    │   │       └── sql_queries.go
+    │   ├── routes.go
+    │   └── usecase
+    │       └── product
+    │           └── pg_usecase_impl.go
+    └── server
+        ├── grpc_server.go
+        ├── server.go
+        └── utils.go
 ```
 
 #### Note
@@ -282,11 +261,14 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
   - /dto: define and mapping request response to delivery request
   - /metrics: init and config metrics for prometheus
   - /middlewares: define middle func
-  - /products
-    - /commands: create commands and publish to message broker
-    - /queries: create queries and publish to message broker
-    - /delivery: define router and handler for protocol (http, gprc, ...)
-    - /service: define and init service
+  - /delivery: define router and handler for protocol (http, gprc, ...) transport data to usecase layer
+  - /usecase: usecase layer define handler logic
+  - /repositories: repository layer define command, queries to access data from third party (database, cache db, ...)
+  - /domain: 
+    - /models: define models
+    - /repositories: define method for data access models
+    - /usecase: define method for logic of models
+  - /server: init and setup server
 - ./docker: store dockerfile
 - ./migrations: store migrate up and down file
 - ./monitoring: config prometheus 
@@ -297,8 +279,6 @@ $ sudo chown -R $(whoami) $(pwd)/master_data
   - ...: connection for database or third party
 - ./proto: proto file
 - ./script: migrate for mongodb
-- ./reader_services: reader services consumer read data from cache db or slave db
-- ./writers_services: writer services consumer write data to master db
 - makefile: define all command for quick run
 
 ### struct of consumer (reader and writer services)
